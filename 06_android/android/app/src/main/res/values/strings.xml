@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hander Demo</string>
+    <string name="description_logo">logo</string>
+    <string name="load">Load</string>
+</resources>

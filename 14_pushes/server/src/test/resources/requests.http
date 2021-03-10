@@ -1,0 +1,367 @@
+### Аутентификация
+
+POST http://localhost:9999/api/users/authentication
+Content-Type: application/x-www-form-urlencoded
+
+login=student&pass=secret
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.token !== undefined, "Token not present in response");
+  client.global.set("token", response.body.token)
+});
+%}
+
+### Регистрация без avatar'ки
+
+POST http://localhost:9999/api/users/registration
+Content-Type: application/x-www-form-urlencoded
+
+login=noname&pass=secret&name=NoName
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.token !== undefined, "Token not present in response");
+  client.global.set("token", response.body.token)
+});
+%}
+
+### Регистрация с avatar'кой
+
+POST http://localhost:9999/api/users/registration
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="login"
+Content-Type: text/plain
+
+newbie
+--WebAppBoundary
+Content-Disposition: form-data; name="pass"
+Content-Type: text/plain
+
+password
+--WebAppBoundary
+Content-Disposition: form-data; name="name"
+Content-Type: text/plain
+
+Newbie
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="image.png"
+
+< ./avatar.jpg
+--WebAppBoundary--
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.token !== undefined, "Token not present in response");
+  client.global.set("token", response.body.token)
+});
+%}
+
+### Получение списка сообщений
+
+GET http://localhost:9999/api/posts
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+});
+%}
+
+### Создание нового сообщения (id = 0)
+
+POST http://localhost:9999/api/posts
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "id": 0,
+  "authorId": 0,
+  "author": "",
+  "authorAvatar": "",
+  "content": "New Post",
+  "published": 0,
+  "likedByMe": false,
+  "likes": 0,
+  "attachment": {
+    "url": "netology.jpg",
+    "type": "IMAGE"
+  }
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.id === 6, "Generated id not 6");
+});
+%}
+
+### Получение сообщения по id
+
+GET http://localhost:9999/api/posts/6
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.id === 6, "id not 6");
+  client.assert(response.body.content === "New Post", "Invalid content");
+});
+%}
+
+### Обновление сообщения (id != 0)
+
+POST http://localhost:9999/api/posts
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "id": 6,
+  "authorId": 0,
+  "author": "",
+  "authorAvatar": "",
+  "content": "New Post (UPDATED)",
+  "published": 0,
+  "likedByMe": false,
+  "likes": 0
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.id === 6, "Id changed");
+  client.assert(response.body.content === "New Post (UPDATED)", "Content not updated");
+});
+%}
+
+### Like сообщения
+
+POST http://localhost:9999/api/posts/6/likes
+Authorization: {{token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Получение сообщения по id
+
+GET http://localhost:9999/api/posts/6
+Authorization: {{token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.id === 6, "id not 6");
+  client.assert(response.body.likes === 1, "likes not incremented");
+  client.assert(response.body.likedByMe === true, "likedByMe didn't changed");
+});
+%}
+
+
+### Дизлайк сообщения
+
+DELETE http://localhost:9999/api/posts/6/likes
+Authorization: {{token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Получение сообщения по id
+
+GET http://localhost:9999/api/posts/6
+Authorization: {{token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(response.body.id === 6, "id not 6");
+  client.assert(response.body.likes === 0, "likes decremented");
+  client.assert(response.body.likedByMe === false, "likedByMe didn't changed");
+});
+%}
+
+### Удаление сообщения по id
+
+DELETE http://localhost:9999/api/posts/6
+Authorization: {{token}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+### Получение несуществующего сообщения
+
+GET http://localhost:9999/api/posts/6
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 404, "Response status is not 404");
+});
+%}
+
+### Получение аватарки
+
+GET http://localhost:9999/avatars/sber.jpg
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === 'image/jpeg', "Invalid mime type");
+});
+%}
+
+### Получение изображения
+
+GET http://localhost:9999/media/sbercard.jpg
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === 'image/jpeg', "Invalid mime type");
+});
+%}
+
+### Загрузка изображения
+
+POST http://localhost:9999/api/media
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="image.png"
+
+< ./image.png
+--WebAppBoundary--
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json' but received '" + response.contentType.mimeType + "'");
+  client.assert(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\.(png|jpg)/.test(response.body.id), "Invalid mime type");
+  client.global.set('mediaId', response.body.id)
+});
+%}
+
+###
+GET http://localhost:9999/media/{{mediaId}}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+  client.assert(response.contentType.mimeType === 'image/png', "Invalid mime type");
+});
+%}
+
+### Создание нового сообщения (id = 0): Forbidden
+
+POST http://localhost:9999/api/posts
+Content-Type: application/json
+
+{
+  "id": 0,
+  "authorId": 0,
+  "author": "",
+  "authorAvatar": "",
+  "content": "New Post",
+  "published": 0,
+  "likedByMe": false,
+  "likes": 0,
+  "attachment": {
+    "url": "netology.jpg",
+    "type": "IMAGE"
+  }
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
+
+### Обновление сообщения (id != 0): Forbidden
+
+POST http://localhost:9999/api/posts
+Content-Type: application/json
+
+{
+  "id": 6,
+  "authorId": 0,
+  "author": "",
+  "authorAvatar": "",
+  "content": "New Post (UPDATED)",
+  "published": 0,
+  "likedByMe": false,
+  "likes": 0
+}
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
+
+### Like сообщения: Forbidden
+
+POST http://localhost:9999/api/posts/6/likes
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
+
+### Дизлайк сообщения: Forbidden
+
+DELETE http://localhost:9999/api/posts/6/likes
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
+
+### Удаление сообщения по id: Forbidden
+
+DELETE http://localhost:9999/api/posts/6
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
+
+### Загрузка изображения: Forbidden
+
+POST http://localhost:9999/api/media
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="image.png"
+
+< ./image.png
+--WebAppBoundary--
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 403, "Response status is not 403");
+});
+%}
