@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
