@@ -4,7 +4,7 @@ plugins {
     id("org.springframework.boot") version "2.3.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.4.20-RC"
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.31"
     kotlin("plugin.spring") version "1.4.10"
 }
 
@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.apache.tika:tika-parsers:1.25")
-    implementation("com.google.firebase:firebase-admin:7.0.1")
+    implementation("com.google.firebase:firebase-admin:7.1.1")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
