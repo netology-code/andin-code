@@ -44,7 +44,7 @@ dependencies {
     def appcompat_version = "1.2.0"
     def constraintlayout_version = "2.0.1"
     def mdc_version = "1.2.1"
-    def okhttp_version = "4.9.0"
+    def okhttp_version = "4.9.1"
     def glide_version = "4.11.0"
     def picasso_version = "2.71828"
 
