@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("org.jetbrains.kotlin.plugin.jpa") version "1.4.31"
     kotlin("jvm") version "1.4.32"
-    kotlin("plugin.spring") version "1.4.31"
+    kotlin("plugin.spring") version "1.4.32"
 }
 
 group = "ru.netology"
