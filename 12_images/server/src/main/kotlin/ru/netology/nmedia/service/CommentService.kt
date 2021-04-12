@@ -70,7 +70,7 @@ class CommentService(private val repository: CommentRepository) {
         )
     )
         .let {
+            it.content = dto.content
             repository.save(it)
-            it
         }.toDto()
 }

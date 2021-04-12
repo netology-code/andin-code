@@ -71,6 +71,5 @@ class CommentService(private val repository: CommentRepository) {
     )
         .let {
             repository.save(it)
-            it
         }.toDto()
 }

@@ -50,7 +50,8 @@ class CommentService(private val repository: CommentRepository) {
                     throw PermissionDeniedException()
                 }
 
-                if (it.id == 0L) repository.save(it) else it.content = dto.content
+                it.content = dto.content
+                if (it.id == 0L) repository.save(it)
                 it
             }.toDto(principal.id)
     }
@@ -101,7 +102,7 @@ class CommentService(private val repository: CommentRepository) {
         )
     )
         .let {
+            it.content = dto.content
             repository.save(it)
-            it
         }.toDto(0L)
 }

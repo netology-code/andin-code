@@ -77,7 +77,6 @@ class PostService(
                 )
             ).let {
             repository.save(it)
-            it
         }.toDto()
 
 }
