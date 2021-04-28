@@ -1,0 +1,250 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/01_backend/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/02_threads/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/02_threads/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/03_multithreading/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/04_sync/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/04_sync/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/04_sync/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/05_current/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/05_current/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/05_current/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/06_android/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/06_android/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/07_crud/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/07_crud/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/08_coroutines/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/08_coroutines/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/09_supervision/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/09_supervision/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/10_mainscope/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/10_mainscope/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/11_flow/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/11_flow/jvm"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/11_flow/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/12_images/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/12_images/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/13_auth/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/13_auth/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/14_pushes/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/14_pushes/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/15_services/android"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
+- package-ecosystem: gradle
+  directory: "/15_services/server"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  assignees:
+  - Onotole1
