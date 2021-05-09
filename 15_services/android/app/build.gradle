@@ -67,6 +67,7 @@ dependencies {
     def coroutines_version = "1.4.3"
     def imagepicker_version = "1.8"
     def workmanager_version = "2.5.0"
+    def play_services_base_version = "17.6.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -97,6 +98,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
     implementation "androidx.work:work-runtime-ktx:$workmanager_version"
+    implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"

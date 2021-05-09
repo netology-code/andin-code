@@ -58,6 +58,7 @@ dependencies {
     def room_version = "2.3.0"
     def firebase_version = "27.1.0"
     def okhttp_version = "4.9.1"
+    def play_services_base_version = "17.6.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -79,6 +80,7 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
     implementation "com.google.firebase:firebase-messaging-ktx"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation "com.google.android.gms:play-services-base:$play_services_base_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
