@@ -27,6 +27,7 @@ abstract class AppDb : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context, AppDb::class.java, "app.db")
             //  .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }
