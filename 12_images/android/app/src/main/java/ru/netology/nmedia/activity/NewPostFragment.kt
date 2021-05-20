@@ -1,11 +1,10 @@
 package ru.netology.nmedia.activity
 
 import android.app.Activity
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import androidx.core.net.toUri
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,18 +15,15 @@ import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.util.AndroidUtils
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
-import java.io.File
 
 class NewPostFragment : Fragment() {
-    private val photoRequestCode = 1
-    private val cameraRequestCode = 2
 
     companion object {
         var Bundle.textArg: String? by StringArg
     }
 
     private val viewModel: PostViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
+        ownerProducer = ::requireParentFragment,
     )
 
     private var fragmentBinding: FragmentNewPostBinding? = null
@@ -72,16 +68,35 @@ class NewPostFragment : Fragment() {
 
         binding.edit.requestFocus()
 
+        val pickPhotoLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when (it.resultCode) {
+                    ImagePicker.RESULT_ERROR -> {
+                        Snackbar.make(
+                            binding.root,
+                            ImagePicker.getError(it.data),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    Activity.RESULT_OK -> {
+                        val uri: Uri? = it.data?.data
+                        viewModel.changePhoto(uri)
+                    }
+                }
+            }
+
         binding.pickPhoto.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
                 .compress(2048)
                 .galleryOnly()
-                .galleryMimeTypes(arrayOf(
-                    "image/png",
-                    "image/jpeg",
-                ))
-                .start(photoRequestCode)
+                .galleryMimeTypes(
+                    arrayOf(
+                        "image/png",
+                        "image/jpeg",
+                    )
+                )
+                .createIntent(pickPhotoLauncher::launch)
         }
 
         binding.takePhoto.setOnClickListener {
@@ -89,11 +104,11 @@ class NewPostFragment : Fragment() {
                 .crop()
                 .compress(2048)
                 .cameraOnly()
-                .start(cameraRequestCode)
+                .createIntent(pickPhotoLauncher::launch)
         }
 
         binding.removePhoto.setOnClickListener {
-            viewModel.changePhoto(null, null)
+            viewModel.changePhoto(null)
         }
 
         viewModel.postCreated.observe(viewLifecycleOwner) {
@@ -111,28 +126,6 @@ class NewPostFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == ImagePicker.RESULT_ERROR) {
-            fragmentBinding?.let {
-                Snackbar.make(it.root, ImagePicker.getError(data), Snackbar.LENGTH_LONG).show()
-            }
-            return
-        }
-        if (resultCode == Activity.RESULT_OK && requestCode == photoRequestCode) {
-            val uri: Uri? = data?.data
-            val file: File? = ImagePicker.getFile(data)
-            viewModel.changePhoto(uri, file)
-            return
-        }
-        if (resultCode == Activity.RESULT_OK && requestCode == cameraRequestCode) {
-            val uri: Uri? = data?.data
-            val file: File? = ImagePicker.getFile(data)
-            viewModel.changePhoto(uri, file)
-            return
-        }
     }
 
     override fun onDestroyView() {

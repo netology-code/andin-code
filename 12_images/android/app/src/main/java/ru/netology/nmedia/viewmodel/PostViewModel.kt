@@ -2,6 +2,7 @@ package ru.netology.nmedia.viewmodel
 
 import android.app.Application
 import android.net.Uri
+import androidx.core.net.toFile
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -89,8 +90,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 try {
                     when(_photo.value) {
                         noPhoto -> repository.save(it)
-                        else -> _photo.value?.file?.let { file ->
-                            repository.saveWithAttachment(it, MediaUpload(file))
+                        else -> _photo.value?.uri?.let { file ->
+                            repository.saveWithAttachment(it, MediaUpload(file.toFile()))
                         }
                     }
                     _dataState.value = FeedModelState()
@@ -115,8 +116,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun changePhoto(uri: Uri?, file: File?) {
-        _photo.value = PhotoModel(uri, file)
+    fun changePhoto(uri: Uri?) {
+        _photo.value = PhotoModel(uri)
     }
 
     fun likeById(id: Long) {
