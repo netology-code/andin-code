@@ -42,10 +42,11 @@ class PostService(
             it
         }.toDto()
 
-    fun removeById(id: Long): Unit = repository.deleteById(id)
-        .also {
-            commentService.removeAllByPostId(id)
-        }
+    fun removeById(id: Long) {
+        repository.findByIdOrNull(id)
+            ?.also(repository::delete)
+            ?.also { commentService.removeAllByPostId(id) }
+    }
 
     fun likeById(id: Long): Post = repository
         .findById(id)

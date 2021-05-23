@@ -37,7 +37,10 @@ class PostService(private val repository: PostRepository) {
             it
         }.toDto()
 
-    fun removeById(id: Long): Unit = repository.deleteById(id)
+    fun removeById(id: Long) {
+        repository.findByIdOrNull(id)
+            ?.also(repository::delete)
+    }
 
     fun likeById(id: Long): Post = repository
         .findById(id)

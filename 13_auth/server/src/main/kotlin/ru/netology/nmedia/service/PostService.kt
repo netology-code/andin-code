@@ -1,6 +1,7 @@
 package ru.netology.nmedia.service
 
 import org.springframework.data.domain.Sort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.netology.nmedia.dto.Post
@@ -66,18 +67,17 @@ class PostService(
             }.toDto(principal.id)
     }
 
-    fun removeById(id: Long): Unit {
+    fun removeById(id: Long) {
         val principal = principal()
-        repository.findById(id)
-            .orElseThrow(::NotFoundException)
-            .let {
+        repository.findByIdOrNull(id)
+            ?.let {
                 if (it.author.id != principal.id) {
                     throw PermissionDeniedException()
                 }
                 repository.delete(it)
                 it
             }
-            .also {
+            ?.also {
                 commentService.removeAllByPostId(it.id)
             }
     }

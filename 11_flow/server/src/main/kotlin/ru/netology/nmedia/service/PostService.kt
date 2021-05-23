@@ -1,6 +1,7 @@
 package ru.netology.nmedia.service
 
 import org.springframework.data.domain.Sort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.netology.nmedia.dto.Post
@@ -46,10 +47,11 @@ class PostService(
             it
         }.toDto()
 
-    fun removeById(id: Long): Unit = repository.deleteById(id)
-        .also {
-            commentService.removeAllByPostId(id)
-        }
+    fun removeById(id: Long) {
+        repository.findByIdOrNull(id)
+            ?.also(repository::delete)
+            ?.also { commentService.removeAllByPostId(id) }
+    }
 
     fun likeById(id: Long): Post = repository
         .findById(id)
@@ -70,13 +72,13 @@ class PostService(
         .toDto()
 
     fun saveInitial(dto: Post) = PostEntity.fromDto(
-                dto.copy(
-                    likes = 0,
-                    likedByMe = false,
-                    published = OffsetDateTime.now().toEpochSecond()
-                )
-            ).let {
-            repository.save(it)
-        }.toDto()
+        dto.copy(
+            likes = 0,
+            likedByMe = false,
+            published = OffsetDateTime.now().toEpochSecond()
+        )
+    ).let {
+        repository.save(it)
+    }.toDto()
 
 }
