@@ -1,8 +1,10 @@
 package ru.netology.nmedia.api
 
+import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,6 +13,7 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.JsonLogInModel
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
@@ -64,6 +67,13 @@ interface PostsApiService {
     @Multipart
     @POST("media")
     suspend fun upload(@Part media: MultipartBody.Part): Response<Media>
+
+    @FormUrlEncoded
+    @POST("users/authentication")
+    suspend fun onSignIn(
+        @Field("login") login: String,
+        @Field("pass") password: String
+    ): Response<JsonLogInModel>
 }
 
 object PostsApi {

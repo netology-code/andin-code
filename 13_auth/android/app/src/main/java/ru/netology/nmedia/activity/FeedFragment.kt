@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,13 +28,30 @@ class FeedFragment : Fragment() {
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
+        fun showAuthDialog(view: View) {
+            AlertDialog.Builder(view.context)
+                .setTitle("Authorization is required")
+                .setMessage("Do you want to sign in?")
+                .setPositiveButton("Sign in") { dialog, id ->
+                    findNavController().navigate(R.id.action_feedFragment_to_logInFragment)
+                }
+                .setNegativeButton("Cancel") { dialog, id ->
+                    // User cancelled the dialog
+                }
+                .show()
+        }
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (viewModel.authenticated) {
+                    viewModel.likeById(post.id)
+                } else {
+                    showAuthDialog(binding.list)
+                }
             }
 
             override fun onRemove(post: Post) {
@@ -76,7 +94,11 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (viewModel.authenticated) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            } else {
+                showAuthDialog(binding.list)
+            }
         }
 
         return binding.root

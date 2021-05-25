@@ -1,5 +1,6 @@
 package ru.netology.nmedia.repository
 
+import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.Flow
 import ru.netology.nmedia.dto.Media
 import ru.netology.nmedia.dto.MediaUpload

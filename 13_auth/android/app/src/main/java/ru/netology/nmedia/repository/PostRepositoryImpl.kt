@@ -1,6 +1,7 @@
 package ru.netology.nmedia.repository
 
 import androidx.lifecycle.*
+import com.google.gson.JsonObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -84,7 +85,8 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         try {
             val media = upload(upload)
             // TODO: add support for other types
-            val postWithAttachment = post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
+            val postWithAttachment =
+                post.copy(attachment = Attachment(media.id, AttachmentType.IMAGE))
             save(postWithAttachment)
         } catch (e: AppError) {
             throw e
@@ -113,4 +115,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             throw UnknownError
         }
     }
+
+
 }

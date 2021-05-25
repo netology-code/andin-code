@@ -4,13 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.installations.FirebaseInstallations
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.auth.AppAuth
@@ -62,8 +67,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.signin -> {
-                // TODO: just hardcode it, implementation must be in homework
-                AppAuth.getInstance().setAuth(5, "x-token")
+                findNavController(R.id.nav_host_fragment).navigate(R.id.logInFragment)
                 true
             }
             R.id.signup -> {
@@ -72,9 +76,20 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 true
             }
             R.id.signout -> {
+                val dialogView = findViewById<View>(R.id.nav_host_fragment)
+                AlertDialog.Builder(dialogView.context)
+                    .setTitle("Are you sure?")
+                    .setMessage("Do you want to sign out?")
+                    .setPositiveButton("Sign out") { dialog, id ->
+                        AppAuth.getInstance().removeAuth()
+                    }
+                    .setNegativeButton("Cancel") { dialog, id ->
+                        // User cancelled the dialog
+                    }
+                    .show()
                 // TODO: just hardcode it, implementation must be in homework
-                AppAuth.getInstance().removeAuth()
                 true
+
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -87,14 +102,14 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 return@with
             }
             if (isUserResolvableError(code)) {
-                getErrorDialog(this@AppActivity, code, 9000)?.show()
+                getErrorDialog(this@AppActivity, code, 9000).show()
                 return
             }
             Toast.makeText(this@AppActivity, R.string.google_play_unavailable, Toast.LENGTH_LONG)
                 .show()
         }
 
-        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+        FirebaseInstallations.getInstance().id.addOnSuccessListener {
             println(it)
         }
     }
