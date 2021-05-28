@@ -61,8 +61,8 @@ fun main() {
 private val gson = Gson()
 private val BASE_URL = "http://127.0.0.1:9999"
 private val client = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
+    .addInterceptor(HttpLoggingInterceptor(::println).apply {
+        level = HttpLoggingInterceptor.Level.BODY
     })
     .connectTimeout(30, TimeUnit.SECONDS)
     .build()
@@ -125,8 +125,8 @@ suspend fun getComments(client: OkHttpClient, id: Long): List<Comment> =
 private val gson = Gson()
 private val BASE_URL = "http://127.0.0.1:9999"
 private val client = OkHttpClient.Builder()
-    .addInterceptor(HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BASIC
+    .addInterceptor(HttpLoggingInterceptor(::println).apply {
+        level = HttpLoggingInterceptor.Level.BODY
     })
     .connectTimeout(30, TimeUnit.SECONDS)
     .build()
