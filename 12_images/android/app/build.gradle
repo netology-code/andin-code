@@ -65,7 +65,7 @@ dependencies {
     def okhttplogging_version = "4.9.1"
     def coroutines_version = "1.5.0"
     def imagepicker_version = "2.1"
-    def fragment_version = "1.3.4"
+    def fragment_version = "1.3.5"
     def play_services_base_version = "17.6.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
