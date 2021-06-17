@@ -16,7 +16,9 @@ public class Main {
     });
     final var t2 = new Thread(() -> {
       for (var i = 0; i < max; i++) {
-        sum++;
+        synchronized (sync) {
+          sum++;
+        }
       }
     });
     final var t3 = new Thread(() -> {
