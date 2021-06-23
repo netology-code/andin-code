@@ -15,6 +15,7 @@ import ru.netology.nmedia.entity.TokenEntity
 import ru.netology.nmedia.entity.UserEntity
 import ru.netology.nmedia.exception.NotFoundException
 import ru.netology.nmedia.exception.PasswordNotMatchException
+import ru.netology.nmedia.exception.UserRegisteredException
 import ru.netology.nmedia.extensions.principalOrNull
 import ru.netology.nmedia.repository.PushTokenRepository
 import ru.netology.nmedia.repository.TokenRepository
@@ -43,6 +44,10 @@ class UserService(
     ).toDto()
 
     fun register(login: String, pass: String, name: String, file: MultipartFile?): Token {
+        if (userRepository.findByLogin(login) != null) {
+            throw UserRegisteredException()
+        }
+
         val avatar = file?.let {
             mediaService.saveAvatar(it)
         }
