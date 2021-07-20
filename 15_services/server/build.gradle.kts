@@ -24,7 +24,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.apache.tika:tika-parsers:1.27")
+    implementation("org.apache.tika:tika-parsers:2.0.0")
     implementation("com.google.firebase:firebase-admin:8.0.0")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
