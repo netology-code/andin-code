@@ -27,7 +27,7 @@ dependencies {
     implementation("org.apache.tika:tika-parsers-standard-package:2.0.0") {
         exclude("org.apache.logging.log4j")
     }
-    implementation("com.google.firebase:firebase-admin:8.0.0")
+    implementation("com.google.firebase:firebase-admin:8.0.1")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
