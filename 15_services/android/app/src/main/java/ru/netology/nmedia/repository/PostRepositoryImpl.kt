@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.*
+import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -22,11 +23,13 @@ import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.error.AppError
 import ru.netology.nmedia.error.NetworkError
 import ru.netology.nmedia.error.UnknownError
+import ru.netology.nmedia.work.SavePostWorker
 import java.io.IOException
 
 class PostRepositoryImpl(
     private val postDao: PostDao,
     private val postWorkDao: PostWorkDao,
+    private val workManager: WorkManager,
 ) : PostRepository {
     override val data = postDao.getAll()
         .map(List<PostEntity>::toDto)
@@ -123,14 +126,22 @@ class PostRepositoryImpl(
         }
     }
 
-    override suspend fun saveWork(post: Post, upload: MediaUpload?): Long {
+    override suspend fun saveWork(post: Post, upload: MediaUpload?) {
         try {
             val entity = PostWorkEntity.fromDto(post).apply {
                 if (upload != null) {
                     this.uri = upload.file.toUri().toString()
                 }
             }
-            return postWorkDao.insert(entity)
+            val data = workDataOf(SavePostWorker.postKey to postWorkDao.insert(entity))
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            val request = OneTimeWorkRequestBuilder<SavePostWorker>()
+                .setInputData(data)
+                .setConstraints(constraints)
+                .build()
+            workManager.enqueue(request)
         } catch (e: Exception) {
             throw UnknownError
         }

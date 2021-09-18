@@ -42,9 +42,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         PostRepositoryImpl(
             AppDb.getInstance(context = application).postDao(),
             AppDb.getInstance(context = application).postWorkDao(),
+            WorkManager.getInstance(application),
         )
-    private val workManager: WorkManager =
-        WorkManager.getInstance(application)
 
     val data: LiveData<FeedModel> = AppAuth.getInstance()
         .authStateFlow
@@ -100,18 +99,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
-                    val id = repository.saveWork(
+                    repository.saveWork(
                         it, _photo.value?.uri?.let { MediaUpload(it.toFile()) }
                     )
-                    val data = workDataOf(SavePostWorker.postKey to id)
-                    val constraints = Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()
-                    val request = OneTimeWorkRequestBuilder<SavePostWorker>()
-                        .setInputData(data)
-                        .setConstraints(constraints)
-                        .build()
-                    workManager.enqueue(request)
 
                     _dataState.value = FeedModelState()
                 } catch (e: Exception) {
