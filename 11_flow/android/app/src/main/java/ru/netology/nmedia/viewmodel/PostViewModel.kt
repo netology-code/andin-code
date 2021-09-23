@@ -43,7 +43,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val newerCount: LiveData<Int> = data.switchMap {
         repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
             .catch { e -> e.printStackTrace() }
-            .asLiveData()
+            .asLiveData(Dispatchers.Default)
     }
 
     private val edited = MutableLiveData(empty)
