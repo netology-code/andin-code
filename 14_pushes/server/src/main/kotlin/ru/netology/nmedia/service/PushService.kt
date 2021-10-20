@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.PushMessage
 import ru.netology.nmedia.repository.PushTokenRepository
 import javax.transaction.Transactional
+import org.springframework.context.annotation.Lazy
 
 @Service
 @Transactional
 class PushService(
+    @Lazy
     private val messaging: FirebaseMessaging,
     private val pushTokenRepository: PushTokenRepository,
     private val objectMapper: ObjectMapper,

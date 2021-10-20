@@ -7,9 +7,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.FileInputStream
+import org.springframework.context.annotation.Lazy
 
 @Configuration
 class FirebaseConfiguration {
+    @Lazy
     @Bean
     fun firebaseApp(): FirebaseApp =
         FirebaseApp.initializeApp(
@@ -18,6 +20,7 @@ class FirebaseConfiguration {
                 .build()
         )
 
+    @Lazy
     @Bean
     fun firebaseMessaging(firebaseApp: FirebaseApp): FirebaseMessaging =
         FirebaseMessaging.getInstance(firebaseApp)
