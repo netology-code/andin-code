@@ -1,2 +1,2 @@
-rootProject.name = "Hander Demo"
+rootProject.name = "Handler Demo"
 include ':app'
