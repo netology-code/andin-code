@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
             // only for demo
             val bitmap = message.data["image"] as Bitmap
             binding.image.setImageBitmap(bitmap)
-            return@Handler false
+            return@Handler true
         }
 
         binding.load.setOnClickListener {
