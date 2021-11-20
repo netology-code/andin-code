@@ -13,7 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="${usesCleartextTraffic}">
-        <activity android:name=".activity.AppActivity">
+        <activity
+            android:name=".activity.AppActivity"
+            android:exported="true">
             <nav-graph android:value="@navigation/nav_main" />
 
             <intent-filter>
