@@ -86,6 +86,7 @@ class NMediaApplication {
                 likes = 0,
                 attachment = Attachment(
                     url = "podcast.jpg",
+                    description = "Как запустить свой подкаст: подборка статей",
                     type = AttachmentType.IMAGE,
                 ),
             )
@@ -102,6 +103,7 @@ class NMediaApplication {
                 likes = 0,
                 attachment = Attachment(
                     url = "sbercard.jpg",
+                    description = "Предлагают новую карту? Проверьте, не мошенничество ли это!",
                     type = AttachmentType.IMAGE,
                 ),
             )
