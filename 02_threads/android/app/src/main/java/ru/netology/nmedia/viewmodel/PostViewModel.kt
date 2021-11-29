@@ -71,11 +71,19 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        thread {
+            val post = repository.likeById(id)
+            edited.postValue(post)
+        }
+        save()
     }
 
     fun unLikeById(id: Long) {
-        thread { repository.unLikeById(id) }
+        thread {
+            val post = repository.unLikeById(id)
+            edited.postValue(post)
+        }
+        save()
     }
 
     fun removeById(id: Long) {
