@@ -72,18 +72,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long) {
         thread {
-            val post = repository.likeById(id)
-            edited.postValue(post)
+            _data.value?.posts?.replacePost(repository.likeById(id), { it.id == id })
         }
-        save()
     }
 
     fun unLikeById(id: Long) {
         thread {
-            val post = repository.unLikeById(id)
-            edited.postValue(post)
+            _data.value?.posts?.replacePost(repository.unLikeById(id), { it.id == id })
         }
-        save()
     }
 
     fun removeById(id: Long) {
@@ -100,6 +96,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: IOException) {
                 _data.postValue(_data.value?.copy(posts = old))
             }
+        }
+    }
+
+    fun <T> List<T>.replacePost(newPost: T, block: (T) -> Boolean): List<T> {
+        return map {
+            if (block(it)) newPost else it
         }
     }
 }
