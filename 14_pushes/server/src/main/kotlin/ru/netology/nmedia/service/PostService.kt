@@ -11,23 +11,25 @@ import ru.netology.nmedia.exception.PermissionDeniedException
 import ru.netology.nmedia.extensions.principal
 import ru.netology.nmedia.repository.PostRepository
 import java.time.OffsetDateTime
+import ru.netology.nmedia.repository.UserRepository
 
 @Service
 @Transactional
 class PostService(
-    private val repository: PostRepository,
+    private val postRepository: PostRepository,
+    private val userRepository: UserRepository,
     private val commentService: CommentService,
 ) {
     fun getAll(): List<Post> {
         val principal = principal()
-        return repository
+        return postRepository
             .findAll(Sort.by(Sort.Direction.DESC, "id"))
             .map { it.toDto(principal.id) }
     }
 
     fun getById(id: Long): Post {
         val principal = principal()
-        return repository
+        return postRepository
             .findById(id)
             .orElseThrow(::NotFoundException)
             .toDto(principal.id)
@@ -35,14 +37,14 @@ class PostService(
 
     fun getNewer(id: Long): List<Post> {
         val principal = principal()
-        return repository
+        return postRepository
             .findAllByIdGreaterThan(id, Sort.by(Sort.Direction.DESC, "id"))
             .map { it.toDto(principal.id) }
     }
 
     fun save(dto: Post): Post {
         val principal = principal()
-        return repository
+        return postRepository
             .findById(dto.id)
             .orElse(
                 PostEntity.fromDto(
@@ -54,7 +56,7 @@ class PostService(
                         likedByMe = false,
                         published = OffsetDateTime.now().toEpochSecond()
                     )
-                )
+                ).copy(author = userRepository.getOne(principal.id))
             )
             .let {
                 if (it.author.id != principal.id) {
@@ -62,19 +64,19 @@ class PostService(
                 }
 
                 it.content = dto.content
-                if (it.id == 0L) repository.save(it)
+                if (it.id == 0L) postRepository.save(it)
                 it
             }.toDto(principal.id)
     }
 
     fun removeById(id: Long) {
         val principal = principal()
-        repository.findByIdOrNull(id)
+        postRepository.findByIdOrNull(id)
             ?.let {
                 if (it.author.id != principal.id) {
                     throw PermissionDeniedException()
                 }
-                repository.delete(it)
+                postRepository.delete(it)
                 it
             }
             ?.also {
@@ -84,7 +86,7 @@ class PostService(
 
     fun likeById(id: Long): Post {
         val principal = principal()
-        return repository
+        return postRepository
             .findById(id)
             .orElseThrow(::NotFoundException)
             .apply {
@@ -95,7 +97,7 @@ class PostService(
 
     fun unlikeById(id: Long): Post {
         val principal = principal()
-        return repository
+        return postRepository
             .findById(id)
             .orElseThrow(::NotFoundException)
             .apply {
@@ -112,6 +114,6 @@ class PostService(
         )
     ).let {
         it.content = dto.content
-        repository.save(it)
+        postRepository.save(it)
     }.toDto(0L)
 }

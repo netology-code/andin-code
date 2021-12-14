@@ -46,7 +46,7 @@ data class PostEntity(
 data class AttachmentEmbeddable(
     var url: String,
     @Column(columnDefinition = "TEXT")
-    var description: String,
+    var description: String?,
     @Enumerated(EnumType.STRING)
     var type: AttachmentType,
 ) {
