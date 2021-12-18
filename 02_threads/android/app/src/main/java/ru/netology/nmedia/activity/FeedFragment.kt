@@ -18,6 +18,8 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
 
+
+
     private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
 
     override fun onCreateView(
@@ -33,7 +35,12 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (post.likedByMe) {
+                    viewModel.unLikeById(post.id)
+                } else {
+                    viewModel.likeById(post.id)
+                }
+                viewModel.loadPosts()
             }
 
             override fun onRemove(post: Post) {
@@ -52,6 +59,9 @@ class FeedFragment : Fragment() {
                 startActivity(shareIntent)
             }
         })
+
+
+
         binding.list.adapter = adapter
         viewModel.data.observe(viewLifecycleOwner, { state ->
             adapter.submitList(state.posts)
@@ -68,6 +78,17 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
 
+        fun onRefresh() {
+            viewModel.loadPosts()
+            binding.swiperefresh.isRefreshing = false
+        }
+
+        binding.swiperefresh.setOnRefreshListener {
+            onRefresh()
+        }
+
         return binding.root
+
+
     }
 }

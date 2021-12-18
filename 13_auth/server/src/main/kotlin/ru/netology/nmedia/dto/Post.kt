@@ -6,7 +6,7 @@ data class Post(
     val id: Long,
     val authorId: Long,
     val author: String,
-    val authorAvatar: String,
+    val authorAvatar: String = "",
     val content: String,
     val published: Long,
     val likedByMe: Boolean,
@@ -16,6 +16,6 @@ data class Post(
 
 data class Attachment(
     val url: String,
-    val description: String,
+    val description: String?,
     val type: AttachmentType,
 )
