@@ -24,7 +24,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.apache.tika:tika-core:2.1.0")
+    implementation("org.apache.tika:tika-core:2.2.1")
     runtimeOnly("com.h2database:h2")
     implementation("org.bouncycastle:bctls-jdk15on:1.69")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
