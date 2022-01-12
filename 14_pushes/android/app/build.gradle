@@ -57,15 +57,15 @@ dependencies {
     def lifecycle_version = "2.4.0"
     def mdc_version = "1.4.0"
     def nav_version = "2.3.5"
-    def room_version = "2.3.0"
+    def room_version = "2.4.0"
     def firebase_version = "29.0.3"
     def glide_version = "4.12.0"
     def retrofit_version = "2.9.0"
     def retrofitgson_version = "2.9.0"
-    def okhttplogging_version = "4.9.2"
+    def okhttplogging_version = "4.9.3"
     def coroutines_version = "1.6.0"
     def imagepicker_version = "2.1"
-    def play_services_base_version = "17.6.0"
+    def play_services_base_version = "18.0.1"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
