@@ -63,7 +63,7 @@ dependencies {
     def retrofit_version = "2.9.0"
     def retrofitgson_version = "2.9.0"
     def okhttplogging_version = "4.9.3"
-    def coroutines_version = "1.6.0"
+    def coroutines_version = "1.6.2"
     def imagepicker_version = "2.1"
     def play_services_base_version = "18.0.1"
 
