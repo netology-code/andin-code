@@ -62,7 +62,7 @@ dependencies {
     def glide_version = "4.13.2"
     def retrofit_version = "2.9.0"
     def retrofitgson_version = "2.9.0"
-    def okhttplogging_version = "4.9.3"
+    def okhttplogging_version = "4.10.0"
     def coroutines_version = "1.6.0"
     def imagepicker_version = "2.1"
     def workmanager_version = "2.7.1"
