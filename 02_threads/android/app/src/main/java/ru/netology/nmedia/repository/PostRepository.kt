@@ -8,4 +8,5 @@ interface PostRepository {
     fun likeById(id: Long)
     fun save(post: Post)
     fun removeById(id: Long)
+    fun deleteLikeById(id: Long) // добвили функцию для удаления лайка
 }

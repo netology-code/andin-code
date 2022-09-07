@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -25,6 +27,7 @@ class FeedFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // viewModel.save()
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         val adapter = PostsAdapter(object : OnInteractionListener {
@@ -33,7 +36,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (post.likedByMe == false) {
+                    viewModel.likeById(post.id)
+                } else {
+                    viewModel.deleteLikeById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
@@ -59,6 +66,12 @@ class FeedFragment : Fragment() {
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
         })
+        // Создали Swipe обновление
+        binding.swipePosts.setOnRefreshListener {
+            viewModel.loadPosts()
+            binding.swipePosts.isRefreshing = false
+            Toast.makeText(this.context, "Update posts", Toast.LENGTH_SHORT).show()
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()

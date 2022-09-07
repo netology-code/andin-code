@@ -2,6 +2,7 @@ package ru.netology.nmedia.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
 import ru.netology.nmedia.repository.*
@@ -71,16 +72,28 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        thread {
+            repository.likeById(id)
+            loadPosts() // обновление постов
+        }
+    }
+
+    fun deleteLikeById(id: Long) {
+        thread {
+            repository.deleteLikeById(id)
+            loadPosts() // обновление постов
+        }
     }
 
     fun removeById(id: Long) {
         thread {
             // Оптимистичная модель
             val old = _data.value?.posts.orEmpty()
+            val posts = _data.value?.posts.orEmpty()
+                .filter { it.id != id }
             _data.postValue(
-                _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .filter { it.id != id }
+                _data.value?.copy(
+                    posts = posts, empty = posts.isEmpty()
                 )
             )
             try {
@@ -91,3 +104,4 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 }
+
