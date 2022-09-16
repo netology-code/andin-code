@@ -1,6 +1,7 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.view.PointerIcon.load
 import androidx.lifecycle.*
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -54,8 +55,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 repository.save(it)
                 _postCreated.postValue(Unit)
             }
+            edited.value = empty
         }
-        edited.value = empty
+
     }
 
     fun edit(post: Post) {
@@ -71,7 +73,23 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        thread {
+            _data.postValue(FeedModel(loading = true))
+            val post = _data.value?.posts.orEmpty().find { it.id == id }
+            try {
+                if (post != null) {
+                    if (!post.likedByMe) {
+                        repository.likeById(id)
+                    } else {
+                        repository.dislikeById(id)
+                    }
+                }
+                loadPosts()
+                _data.postValue(FeedModel(loading = false))
+            } catch (e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        }
     }
 
     fun removeById(id: Long) {

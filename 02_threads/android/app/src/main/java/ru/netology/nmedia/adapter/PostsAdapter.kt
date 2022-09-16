@@ -15,6 +15,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onRefresh()
 }
 
 class PostsAdapter(
@@ -58,6 +59,10 @@ class PostViewHolder(
                             R.id.edit -> {
                                 onInteractionListener.onEdit(post)
                                 true
+                            }
+                            R.id.refresh -> {
+                                onInteractionListener.onRefresh()
+                                return@setOnMenuItemClickListener true
                             }
 
                             else -> false

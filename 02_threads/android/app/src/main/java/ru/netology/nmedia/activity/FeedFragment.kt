@@ -51,14 +51,22 @@ class FeedFragment : Fragment() {
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
             }
+
+            override fun onRefresh() {
+                binding.swipeRefresh.isRefreshing = true
+                viewModel.loadPosts()
+                binding.swipeRefresh.isRefreshing = false
+
+            }
+
         })
         binding.list.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner, { state ->
+        viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.progress.isVisible = state.loading
             binding.errorGroup.isVisible = state.error
             binding.emptyText.isVisible = state.empty
-        })
+        }
 
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
@@ -66,6 +74,11 @@ class FeedFragment : Fragment() {
 
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadPosts()
+            binding.swipeRefresh.isRefreshing = false
         }
 
         return binding.root
