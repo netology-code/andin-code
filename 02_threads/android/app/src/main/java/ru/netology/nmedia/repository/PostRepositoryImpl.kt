@@ -10,7 +10,7 @@ import ru.netology.nmedia.dto.Post
 import java.util.concurrent.TimeUnit
 
 
-class PostRepositoryImpl: PostRepository {
+class PostRepositoryImpl : PostRepository {
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .build()
@@ -35,9 +35,34 @@ class PostRepositoryImpl: PostRepository {
             }
     }
 
-    override fun likeById(id: Long) {
-        // TODO: do this in homework
+    override fun likeById(id: Long): Post {
+        val request = Request.Builder()
+            .post("".toRequestBody(jsonType))
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        return client.newCall(request)
+            .execute()
+            .let { it.body?.string() ?: error("Body is null") }
+            .let { gson.fromJson(it, Post::class.java) }
+
     }
+
+    override fun dislikeById(id: Long): Post {
+        val request = Request.Builder()
+            .delete()
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        return client.newCall(request)
+            .execute()
+            .let { it.body?.string() ?: error("Body is null") }
+            .let { gson.fromJson(it, Post::class.java) }
+    }
+
+    override fun shareById(id: Long) {
+    }
+
 
     override fun save(post: Post) {
         val request: Request = Request.Builder()
@@ -60,4 +85,5 @@ class PostRepositoryImpl: PostRepository {
             .execute()
             .close()
     }
+
 }
