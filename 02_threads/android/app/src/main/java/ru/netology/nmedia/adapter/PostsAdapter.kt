@@ -29,6 +29,9 @@ class PostsAdapter(
         val post = getItem(position)
         holder.bind(post)
     }
+
+
+
 }
 
 class PostViewHolder(
@@ -58,7 +61,6 @@ class PostViewHolder(
                                 onInteractionListener.onEdit(post)
                                 true
                             }
-
                             else -> false
                         }
                     }
