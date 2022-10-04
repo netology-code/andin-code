@@ -60,10 +60,10 @@ class PostViewHolder(
                                 onInteractionListener.onEdit(post)
                                 true
                             }
-                            R.id.refresh -> {
-                                onInteractionListener.onRefresh()
-                                return@setOnMenuItemClickListener true
-                            }
+//                            R.id.refresh -> {
+//                                onInteractionListener.onRefresh()
+//                                return@setOnMenuItemClickListener true
+//                            }
 
                             else -> false
                         }
