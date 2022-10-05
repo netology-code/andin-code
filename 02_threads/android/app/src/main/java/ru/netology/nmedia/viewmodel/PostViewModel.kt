@@ -43,6 +43,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 _data.postValue(FeedModel(error = true))
             }
         })
+        _data.value = FeedModel(loading = false)
     }
 
     fun save() {

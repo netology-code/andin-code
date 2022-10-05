@@ -47,6 +47,7 @@ class PostRepositoryImpl : PostRepository {
 
     override fun likeByIdAsync(id: Long, callback: PostRepository.Callback<Post>) {
         val request = Request.Builder()
+            .post("".toRequestBody(jsonType))
             .url("${BASE_URL}/api/posts/$id/likes")
             .build()
 
