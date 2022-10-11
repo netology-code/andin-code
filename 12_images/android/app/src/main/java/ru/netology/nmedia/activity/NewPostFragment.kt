@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,29 +30,6 @@ class NewPostFragment : Fragment() {
     )
 
     private var fragmentBinding: FragmentNewPostBinding? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_new_post, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.save -> {
-                fragmentBinding?.let {
-                    viewModel.changeContent(it.edit.text.toString())
-                    viewModel.save()
-                    AndroidUtils.hideKeyboard(requireView())
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,6 +104,26 @@ class NewPostFragment : Fragment() {
             binding.photoContainer.visibility = View.VISIBLE
             binding.photo.setImageURI(it.uri)
         }
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_new_post, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean =
+                when (menuItem.itemId) {
+                    R.id.save -> {
+                        fragmentBinding?.let {
+                            viewModel.changeContent(it.edit.text.toString())
+                            viewModel.save()
+                            AndroidUtils.hideKeyboard(requireView())
+                        }
+                        true
+                    }
+                    else -> false
+                }
+
+        }, viewLifecycleOwner)
 
         return binding.root
     }
