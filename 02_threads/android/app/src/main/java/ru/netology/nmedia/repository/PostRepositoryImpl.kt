@@ -35,27 +35,38 @@ class PostRepositoryImpl: PostRepository {
             }
     }
 
-    override fun likeById(id: Long) {
+    override fun likeById(id: Long): Post {
         val request: Request = Request.Builder()
             .post(gson.toJson(Unit).toRequestBody(jsonType))
             .url("${BASE_URL}/api/posts/$id/likes")
             .build()
 
-        client.newCall(request)
+        return client.newCall(request)
             .execute()
-            .close()
-    }
+            .let {
+                it.body?.string() ?: throw java.lang.RuntimeException("Body is null")
+            }
+            .let {
+                gson.fromJson(it, Post::class.java)
+            }
+        }
 
-    override fun unlikeById(id: Long) {
+    override fun unlikeById(id: Long): Post {
         val request: Request = Request.Builder()
-            .delete(gson.toJson(id).toRequestBody(jsonType))
+            .delete()
             .url("${BASE_URL}/api/posts/$id/likes")
             .build()
 
-        client.newCall(request)
+        return client.newCall(request)
             .execute()
-            .close()
-    }
+            .let {
+                it.body?.string() ?: throw java.lang.RuntimeException("Body is null")
+            }
+            .let {
+                gson.fromJson(it, Post::class.java)
+            }
+        }
+
 
     override fun save(post: Post) {
         val request: Request = Request.Builder()
