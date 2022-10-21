@@ -18,7 +18,7 @@ class PostService(
 ) {
     fun getAll(): List<Post> = repository
         .findAll(Sort.by(Sort.Direction.DESC, "id"))
-        .map { it.toDto() }
+        .map { it.copy(isSendToServer = true).toDto() }
 
     fun getById(id: Long): Post = repository
         .findById(id)

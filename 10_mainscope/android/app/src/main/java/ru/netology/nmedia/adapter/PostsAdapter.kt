@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -17,6 +18,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun repeatRequest(post: Post){}
 }
 
 class PostsAdapter(
@@ -39,6 +41,12 @@ class PostViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {
+        if (post.isSendToServer) {
+            binding.imageViewErrorSend.visibility = View.GONE
+        } else {
+            binding.imageViewErrorSend.visibility = View.VISIBLE
+        }
+
         binding.apply {
             author.text = post.author
             published.text = post.published
@@ -46,6 +54,8 @@ class PostViewHolder(
             avatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -65,6 +75,10 @@ class PostViewHolder(
                         }
                     }
                 }.show()
+            }
+
+            imageViewErrorSend.setOnClickListener {
+                onInteractionListener.repeatRequest(post)
             }
 
             like.setOnClickListener {

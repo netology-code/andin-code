@@ -1,7 +1,10 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
@@ -10,6 +13,7 @@ import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import java.time.OffsetDateTime
 
 private val empty = Post(
     id = 0,
@@ -18,7 +22,8 @@ private val empty = Post(
     authorAvatar = "",
     likedByMe = false,
     likes = 0,
-    published = ""
+    published = "",
+    isSendToServer = false
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -60,12 +65,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun save() {
         edited.value?.let {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
-                    repository.save(it)
+                    repository.save(
+                        it.copy(
+                            author = "Student",
+                            authorAvatar = "netology.jpg",
+                            published = OffsetDateTime.now().toEpochSecond()
+                                .toString()
+                        )
+                    )
                     _dataState.value = FeedModelState()
                 } catch (e: Exception) {
                     _dataState.value = FeedModelState(error = true)
@@ -87,11 +100,30 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        TODO()
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.likeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+
     }
 
-    fun removeById(id: Long) {
-        TODO()
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
+
+    fun repeatRequestAddPost(post: Post) = viewModelScope.launch {
+//        try {
+//            repository.save(post.copy(id = 0L))
+//        } catch (e: Exception) {
+//            _dataState.value = FeedModelState(error = true)
+//        }
+    }
+
+
 }
