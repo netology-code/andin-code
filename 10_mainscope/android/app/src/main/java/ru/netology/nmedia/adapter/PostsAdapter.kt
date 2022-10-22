@@ -43,8 +43,13 @@ class PostViewHolder(
     fun bind(post: Post) {
         if (post.isSendToServer) {
             binding.imageViewErrorSend.visibility = View.GONE
+            binding.like.isEnabled = true
+            binding.share.isEnabled = true
         } else {
             binding.imageViewErrorSend.visibility = View.VISIBLE
+            binding.like.isEnabled = false
+            binding.share.isEnabled = false
+
         }
 
         binding.apply {

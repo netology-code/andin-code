@@ -26,6 +26,8 @@ private val empty = Post(
     isSendToServer = false
 )
 
+private var idCurrent = -1L
+
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
     private val repository: PostRepository =
@@ -72,7 +74,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 try {
                     repository.save(
-                        it.copy(
+                        it.copy(id = idCurrent,
                             author = "Student",
                             authorAvatar = "netology.jpg",
                             published = OffsetDateTime.now().toEpochSecond()
@@ -86,6 +88,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         edited.value = empty
+        idCurrent--
     }
 
     fun edit(post: Post) {
@@ -118,11 +121,13 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun repeatRequestAddPost(post: Post) = viewModelScope.launch {
-//        try {
-//            repository.save(post.copy(id = 0L))
-//        } catch (e: Exception) {
-//            _dataState.value = FeedModelState(error = true)
-//        }
+        try {
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.save(post)
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
 
 
