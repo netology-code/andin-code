@@ -4,7 +4,6 @@ import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
 import ru.netology.nmedia.dto.Post
@@ -33,7 +32,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+    val data: LiveData<FeedModel> =
+        repository.data.map { FeedModel(it).copy(posts = myFilterErrorPosts()) }
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
@@ -74,7 +74,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 try {
                     repository.save(
-                        it.copy(id = idCurrent,
+                        it.copy(
+                            id = idCurrent,
                             author = "Student",
                             authorAvatar = "netology.jpg",
                             published = OffsetDateTime.now().toEpochSecond()
@@ -130,5 +131,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    private fun myFilterErrorPosts(): List<Post> {
 
+        val sendServerErrorPosts = mutableListOf<Post>()
+        var posts = repository.data.value as MutableList<Post>
+        for (post in posts) {
+            if (!post.isSendToServer) {
+                sendServerErrorPosts.add(post)
+            }
+        }
+        posts = posts.filter {
+            it.isSendToServer
+        } as MutableList<Post>
+
+        sendServerErrorPosts.addAll(posts)
+
+        return sendServerErrorPosts
+    }
 }
