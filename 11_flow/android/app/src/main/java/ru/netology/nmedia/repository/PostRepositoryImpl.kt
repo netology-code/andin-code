@@ -17,9 +17,10 @@ import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-    override val data = dao.getAll()
+    override val data = dao.getAllChecked()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
+
 
     override suspend fun getAll() {
         try {
@@ -29,7 +30,9 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
+            dao.insert(body.map {
+               PostEntity.fromDto(it.copy(isChecked = true))
+            })
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -67,6 +70,14 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         } catch (e: Exception) {
             throw UnknownError
         }
+    }
+
+    override suspend fun getAllFromDb() {
+        val list = mutableListOf<PostEntity>()
+         dao.getAll().forEach {
+            list.add(it.copy(isChecked = true))
+        }
+        dao.insert(list)
     }
 
     override suspend fun removeById(id: Long) {

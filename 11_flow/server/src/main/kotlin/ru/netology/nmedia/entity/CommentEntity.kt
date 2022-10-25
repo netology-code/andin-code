@@ -15,7 +15,7 @@ data class CommentEntity(
     var likedByMe: Boolean,
     var likes: Int = 0,
 ) {
-    fun toDto() = Comment(id, postId, author, authorAvatar, content, published, likedByMe, likes)
+    fun toDto() = Comment(id, postId, author, authorAvatar, content, published, likedByMe, likes , )
 
     companion object {
         fun fromDto(dto: Comment) = CommentEntity(

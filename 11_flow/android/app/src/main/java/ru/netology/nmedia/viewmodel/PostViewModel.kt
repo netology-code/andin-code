@@ -22,7 +22,9 @@ private val empty = Post(
     authorAvatar = "",
     likedByMe = false,
     likes = 0,
-    published = ""
+    published = "",
+    isChecked = false
+
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -31,8 +33,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
     val data: LiveData<FeedModel> = repository.data
-        .map(::FeedModel)
+        .map { FeedModel(it) }
         .asLiveData(Dispatchers.Default)
+
 
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
@@ -106,5 +109,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeById(id: Long) {
         TODO()
+    }
+
+     fun checkPosts() {
+         viewModelScope.launch {
+             repository.getAllFromDb()
+         }
     }
 }
