@@ -1,6 +1,8 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.db.AppDb
@@ -10,6 +12,7 @@ import ru.netology.nmedia.model.FeedModelState
 import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
+import java.time.OffsetDateTime
 
 private val empty = Post(
     id = 0,
@@ -18,15 +21,19 @@ private val empty = Post(
     authorAvatar = "",
     likedByMe = false,
     likes = 0,
-    published = ""
+    published = "",
+    isSendToServer = false
 )
+
+private var idCurrent = -1L
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     // упрощённый вариант
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
-    val data: LiveData<FeedModel> = repository.data.map(::FeedModel)
+    val data: LiveData<FeedModel> =
+        repository.data.map { FeedModel(it).copy(posts = myFilterErrorPosts()) }
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
         get() = _dataState
@@ -60,12 +67,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun save() {
         edited.value?.let {
             _postCreated.value = Unit
             viewModelScope.launch {
                 try {
-                    repository.save(it)
+                    repository.save(
+                        it.copy(
+                            id = idCurrent,
+                            author = "Student",
+                            authorAvatar = "netology.jpg",
+                            published = OffsetDateTime.now().toEpochSecond()
+                                .toString()
+                        )
+                    )
                     _dataState.value = FeedModelState()
                 } catch (e: Exception) {
                     _dataState.value = FeedModelState(error = true)
@@ -73,6 +89,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         edited.value = empty
+        idCurrent--
     }
 
     fun edit(post: Post) {
@@ -87,11 +104,48 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        TODO()
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.likeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+
     }
 
-    fun removeById(id: Long) {
-        TODO()
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    fun repeatRequestAddPost(post: Post) = viewModelScope.launch {
+        try {
+            _dataState.value = FeedModelState(refreshing = true)
+            repository.save(post)
+            _dataState.value = FeedModelState()
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+
+    private fun myFilterErrorPosts(): List<Post> {
+
+        val sendServerErrorPosts = mutableListOf<Post>()
+        var posts = repository.data.value as MutableList<Post>
+        for (post in posts) {
+            if (!post.isSendToServer) {
+                sendServerErrorPosts.add(post)
+            }
+        }
+        posts = posts.filter {
+            it.isSendToServer
+        } as MutableList<Post>
+
+        sendServerErrorPosts.addAll(posts)
+
+        return sendServerErrorPosts
     }
 }

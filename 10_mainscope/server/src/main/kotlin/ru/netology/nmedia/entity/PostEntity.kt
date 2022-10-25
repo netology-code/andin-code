@@ -15,10 +15,12 @@ data class PostEntity(
     var published: Long,
     var likedByMe: Boolean,
     var likes: Int = 0,
+    var isSendToServer: Boolean = true,
     @Embedded
     var attachment: AttachmentEmbeddable?,
 ) {
-    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment?.toDto())
+    fun toDto() =
+        Post(id, author, authorAvatar, content, published, likedByMe, likes, isSendToServer, attachment?.toDto())
 
     companion object {
         fun fromDto(dto: Post) = PostEntity(
@@ -29,6 +31,7 @@ data class PostEntity(
             dto.published,
             dto.likedByMe,
             dto.likes,
+            dto.isSendToServer,
             AttachmentEmbeddable.fromDto(dto.attachment),
         )
     }

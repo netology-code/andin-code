@@ -9,6 +9,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/button_goTo_newPosts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/button_go_to_new_posts_text"
+            android:visibility="gone"
+            style="@style/ButtonGoToNewPosts_Style"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
         <TextView
             android:id="@+id/emptyText"
             android:layout_width="wrap_content"

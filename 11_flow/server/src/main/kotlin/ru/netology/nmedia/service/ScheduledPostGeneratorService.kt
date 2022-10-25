@@ -10,7 +10,7 @@ class ScheduledPostGeneratorService(
     private val postService: PostService,
 ) {
     private val faker = Faker()
-    @Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(fixedRate = 20 * 1000)
     fun generate() {
         postService.saveInitial(
             Post(
@@ -21,6 +21,7 @@ class ScheduledPostGeneratorService(
                 published = 0,
                 likedByMe = false,
                 likes = 0,
+                isChecked = false
             )
         )
     }
