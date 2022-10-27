@@ -9,13 +9,16 @@ import ru.netology.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
+    @Query("SELECT * FROM PostEntity WHERE notShownYet = 0 ORDER BY id DESC")
     fun getAll(): Flow<List<PostEntity>>
+
+    @Query("SELECT * FROM PostEntity WHERE notShownYet = 1 ORDER BY id DESC")
+    fun getNotShownPosts(): List<PostEntity>
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean
 
-    @Query("SELECT COUNT(*) FROM PostEntity")
+    @Query("SELECT COUNT(*) FROM PostEntity WHERE notShownYet = 1")
     suspend fun count(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -27,3 +30,4 @@ interface PostDao {
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
 }
+

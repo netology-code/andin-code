@@ -28,7 +28,7 @@ interface PostDao {
     suspend fun getNotSavedPosts(): List<PostEntity>
 
     @Query("Select min(id) from PostEntity WHERE notSaved = 1")
-    suspend fun getMaxNotSavePostId(): Long?
+    suspend fun getMinNotSavePostId(): Long?
 
     @Query("Select * FROM PostEntity WHERE id = :id AND notSaved = 1")
     suspend fun getNotSavedPostById(id: Long): PostEntity?

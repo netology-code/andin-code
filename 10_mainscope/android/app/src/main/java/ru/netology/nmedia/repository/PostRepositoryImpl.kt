@@ -51,7 +51,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
     override suspend fun save(post: Post) {
         try {
-            val id = dao.getNotSavedPostById(post.id)?.id ?: ((dao.getMaxNotSavePostId() ?: 0L) - 1L)
+            val id = dao.getNotSavedPostById(post.id)?.id ?: ((dao.getMinNotSavePostId() ?: 0L) - 1L)
             val notSaved = (id == post.id)
             dao.insert(PostEntity.fromDto(post.copy(id = id)).copy(notSaved = true))
             val response = if (notSaved) PostsApi.service.save(post.copy(id = 0L)) else PostsApi.service.save(post)
