@@ -24,6 +24,9 @@ interface PostDao {
 
     @Query("DELETE FROM PostEntity WHERE id = :id")
     suspend fun removeById(id: Long)
+
+    @Query("SELECT * FROM postentity WHERE id == :id")
+    suspend fun getPostById(id: Long):PostEntity
 }
 
 class Converters {

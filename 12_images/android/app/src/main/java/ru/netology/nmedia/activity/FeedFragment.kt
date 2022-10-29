@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,9 +49,19 @@ class FeedFragment : Fragment() {
                     type = "text/plain"
                 }
 
+
                 val shareIntent =
                     Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
+            }
+
+            override fun onShowImage(attachmentUrl: String) {
+
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_showImageFragment,
+                    Bundle().apply {
+                        putString("url", attachmentUrl)
+                    })
             }
         })
         binding.list.adapter = adapter
