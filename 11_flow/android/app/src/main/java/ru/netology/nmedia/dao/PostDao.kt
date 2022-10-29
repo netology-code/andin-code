@@ -15,6 +15,15 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity WHERE notShownYet = 1 ORDER BY id DESC")
     fun getNotShownPosts(): List<PostEntity>
 
+    @Query("SELECT * FROM PostEntity WHERE notSaved = 1")
+    suspend fun getNotSavedPosts(): List<PostEntity>
+
+    @Query("Select min(id) from PostEntity WHERE notSaved = 1")
+    suspend fun getMinNotSavePostId(): Long?
+
+    @Query("Select * FROM PostEntity WHERE id = :id AND notSaved = 1")
+    suspend fun getNotSavedPostById(id: Long): PostEntity?
+
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean
 

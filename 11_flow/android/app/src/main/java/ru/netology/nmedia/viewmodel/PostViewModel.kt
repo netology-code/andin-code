@@ -55,6 +55,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadPosts() = viewModelScope.launch {
         try {
+            withContext(Dispatchers.IO) { repository.processingNotSavedPosts() }
             _dataState.value = FeedModelState(loading = true)
             repository.getAll()
             _dataState.value = FeedModelState()
@@ -71,6 +72,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun refreshPosts() = viewModelScope.launch {
         try {
+            withContext(Dispatchers.IO) { repository.processingNotSavedPosts() }
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
             _dataState.value = FeedModelState()
@@ -106,11 +108,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        TODO()
+    fun likeById(id: Long, likeByMe: Boolean) {
+        viewModelScope.launch {
+            try {
+                repository.likeById(id, likeByMe)
+                _dataState.value = FeedModelState()
+            } catch (e: Exception) {
+                _dataState.value = FeedModelState(error = true)
+            }
+        }
     }
 
     fun removeById(id: Long) {
-        TODO()
+        viewModelScope.launch {
+            try {
+                repository.removeById(id)
+                _dataState.value = FeedModelState()
+            } catch (e: Exception) {
+                _dataState.value = FeedModelState(error = true)
+            }
+        }
     }
 }

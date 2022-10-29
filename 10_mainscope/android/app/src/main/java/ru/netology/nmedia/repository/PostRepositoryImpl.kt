@@ -18,10 +18,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
     override suspend fun getAll() {
         try {
-//            dao.getNotSavedPosts().forEach { postEntity ->
-//                save(postEntity.toDto())
-//            }
-
             val response = PostsApi.service.getAll()
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())

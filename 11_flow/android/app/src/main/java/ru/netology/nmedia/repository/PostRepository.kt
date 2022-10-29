@@ -9,8 +9,9 @@ interface PostRepository {
     fun getNewerCount(id: Long): Flow<Int>
     suspend fun save(post: Post)
     suspend fun removeById(id: Long)
-    suspend fun likeById(id: Long)
+    suspend fun likeById(id: Long, likedByMe: Boolean)
     suspend fun getNotShownPosts(): List<Post>
+    suspend fun processingNotSavedPosts()
     suspend fun updatePostShowingState()
 }
 

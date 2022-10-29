@@ -11,6 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -31,7 +35,9 @@ class FeedFragment : Fragment() {
 
         binding.newPostsShowing.setOnClickListener {
             it.isVisible = false
+
             viewModel.updateShowingPostsState()
+
             val smoothScroller = object : LinearSmoothScroller(requireContext()) {
                 override fun getVerticalSnapPreference(): Int {
                     return SNAP_TO_START
@@ -48,7 +54,7 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                viewModel.likeById(post.id, post.likedByMe)
             }
 
             override fun onRemove(post: Post) {
