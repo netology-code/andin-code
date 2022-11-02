@@ -29,4 +29,11 @@
     <string name="sign_in">Вход</string>
     <string name="sign_up">Регистрация</string>
     <string name="sign_out">Выход</string>
+    <string name="massage_dialog_Auth">Войдите чтобы совершить это действие</string>
+    <string name="title_dialog_Auth">Внимание</string>
+    <string name="massageInCreatePost_dialog_Auth">Вы уверены что хотите выйти?</string>
+    <string name="word_Yes">Да</string>
+    <string name="word_No">Нет</string>
+
+
 </resources>

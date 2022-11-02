@@ -11,7 +11,7 @@
        android:id="@+id/textView_SignIn"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:layout_marginTop="212dp"
+       android:layout_marginTop="68dp"
        android:text="Login"
        android:textSize="36sp"
        android:textStyle="bold"

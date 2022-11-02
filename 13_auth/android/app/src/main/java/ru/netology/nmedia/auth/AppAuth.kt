@@ -46,6 +46,10 @@ class AppAuth private constructor(context: Context) {
         }
     }
 
+     fun isAuth():Boolean{
+        return _authStateFlow.value != AuthState()
+    }
+
     companion object {
         @Volatile
         private var instance: AppAuth? = null
@@ -61,6 +65,8 @@ class AppAuth private constructor(context: Context) {
         }
 
         private fun buildAuth(context: Context): AppAuth = AppAuth(context)
+
+
     }
 }
 

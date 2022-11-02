@@ -1,5 +1,7 @@
 package ru.netology.nmedia.activity
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -7,7 +9,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
@@ -63,16 +67,16 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         return when (item.itemId) {
             R.id.signin -> {
                 findNavController(R.id.nav_host_fragment).navigate(R.id.action_feedFragment_to_authFragment)
-                //AppAuth.getInstance().setAuth(5, "x-token")
                 true
             }
             R.id.signup -> {
-                    AppAuth.getInstance().setAuth(5, "x-token")
+                AppAuth.getInstance().setAuth(5, "x-token")
                 true
             }
             R.id.signout -> {
-                // TODO: just hardcode it, implementation must be in homework
-                AppAuth.getInstance().removeAuth()
+                if (NewPostFragment.isActiveFragment) {
+                    createAndShowAuthDialog()
+                } else AppAuth.getInstance().removeAuth()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -96,5 +100,27 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         FirebaseMessaging.getInstance().token.addOnSuccessListener {
             println(it)
         }
+    }
+
+    private fun createAndShowAuthDialog() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.title_dialog_Auth)
+            .setMessage(R.string.massageInCreatePost_dialog_Auth)
+            .setCancelable(true)
+            .setPositiveButton(R.string.word_Yes, object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    AppAuth.getInstance().removeAuth()
+                    findNavController(R.id.nav_host_fragment).navigateUp()
+                }
+
+            })
+            .setNegativeButton(R.string.word_No, object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    return
+                }
+
+            })
+            .create()
+            .show()
     }
 }
