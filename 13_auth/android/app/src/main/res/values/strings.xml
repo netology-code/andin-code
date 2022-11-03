@@ -28,4 +28,9 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_out">Sign Out</string>
+    <string name="massage_dialog_Auth">login to take this action</string>
+    <string name="title_dialog_Auth">Warning</string>
+    <string name="massageInCreatePost_dialog_Auth">Are you sure?</string>
+    <string name="word_Yes">Yes</string>
+    <string name="word_No">No</string>
 </resources>

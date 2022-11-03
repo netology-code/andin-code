@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.NonCancellable.isActive
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentNewPostBinding
 import ru.netology.nmedia.util.AndroidUtils
@@ -20,7 +21,13 @@ import ru.netology.nmedia.viewmodel.PostViewModel
 class NewPostFragment : Fragment() {
 
     companion object {
+        var isActiveFragment = false
         var Bundle.textArg: String? by StringArg
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        isActiveFragment = true
+        super.onCreate(savedInstanceState)
     }
 
     private val viewModel: PostViewModel by viewModels(
@@ -59,6 +66,8 @@ class NewPostFragment : Fragment() {
                     Activity.RESULT_OK -> viewModel.changePhoto(it.data?.data)
                 }
             }
+
+
 
         binding.pickPhoto.setOnClickListener {
             ImagePicker.with(this)
@@ -123,8 +132,16 @@ class NewPostFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStop() {
+        isActiveFragment = false
+        super.onStop()
+    }
+
+
     override fun onDestroyView() {
         fragmentBinding = null
         super.onDestroyView()
     }
+
+
 }

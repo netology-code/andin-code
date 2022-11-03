@@ -1,10 +1,13 @@
 package ru.netology.nmedia.activity
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
@@ -33,7 +37,12 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (AppAuth.getInstance().isAuth()){
+                    viewModel.likeById(post.id)
+                }else{
+                    createAndShowAuthDialog()
+                }
+
             }
 
             override fun onRemove(post: Post) {
@@ -76,9 +85,27 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (AppAuth.getInstance().isAuth()) {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            } else {
+                createAndShowAuthDialog()
+            }
         }
 
         return binding.root
+    }
+
+    private fun createAndShowAuthDialog(){
+        AlertDialog.Builder(activity)
+            .setTitle(R.string.title_dialog_Auth)
+            .setMessage(R.string.massage_dialog_Auth)
+            .setCancelable(true)
+            .setPositiveButton("Log-in", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    findNavController().navigate(R.id.action_feedFragment_to_authFragment)
+                }
+            })
+            .create()
+            .show()
     }
 }

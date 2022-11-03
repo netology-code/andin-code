@@ -9,3 +9,6 @@ class NMediaApplication : Application() {
         AppAuth.initApp(this)
     }
 }
+
+const val KEY = "key"
+const val VALUE = "value"
