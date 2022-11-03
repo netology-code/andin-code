@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -17,6 +18,8 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.application.KEY
+import ru.netology.nmedia.application.VALUE
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.viewmodel.AuthViewModel
 
@@ -70,7 +73,10 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 true
             }
             R.id.signup -> {
-                AppAuth.getInstance().setAuth(5, "x-token")
+                findNavController(R.id.nav_host_fragment).navigate(R.id.action_feedFragment_to_authFragment , bundleOf().apply {
+                    putString(KEY , VALUE)
+                })
+               // AppAuth.getInstance().setAuth(5, "x-token")
                 true
             }
             R.id.signout -> {
@@ -111,6 +117,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     AppAuth.getInstance().removeAuth()
                     findNavController(R.id.nav_host_fragment).navigateUp()
+
                 }
 
             })

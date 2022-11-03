@@ -116,7 +116,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
         }
     }
 
-  override  suspend fun updateUser(login: String, pass: String): AuthState {
+    override suspend fun updateUser(login: String, pass: String): AuthState {
         try {
             val response = PostsApi.service.logInUser(login, pass)
             if (!response.isSuccessful) {
@@ -129,4 +129,20 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             throw UnknownError
         }
     }
+
+    override suspend fun registerUser(login: String, pass: String, name: String): AuthState {
+        try {
+            val response = PostsApi.service.registerUser(login, pass, name)
+            if (!response.isSuccessful){
+                throw ApiError(response.code() , response.message())
+            }
+            return response.body() ?: throw ApiError(response.code() , response.message())
+        }catch (e: IOException) {
+            throw NetworkError
+        } catch (e: Exception) {
+            throw UnknownError
+        }
+    }
+
+
 }

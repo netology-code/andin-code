@@ -17,16 +17,27 @@ class LogInViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
     private var state = false
-    set(value) {
-        field = value
-        authState.value = field
-    }
+        set(value) {
+            field = value
+            authState.value = field
+        }
     val authState = MutableLiveData(state)
 
 
     fun userAuth(login: String, pass: String) {
         viewModelScope.launch {
             val auth = repository.updateUser(login, pass)
+            AppAuth.getInstance().setAuth(
+                auth.id,
+                token = auth.token!!
+            )
+            state = true
+        }
+    }
+
+    fun userRegister(login: String, pass: String, name: String) {
+        viewModelScope.launch {
+            val auth = repository.registerUser(login, pass, name)
             AppAuth.getInstance().setAuth(
                 auth.id,
                 token = auth.token!!
