@@ -46,7 +46,7 @@ dependencies {
     def constraintlayout_version = "2.1.4"
     def mdc_version = "1.6.1"
     def okhttp_version = "4.10.0"
-    def glide_version = "4.14.1"
+    def glide_version = "4.14.2"
     def picasso_version = "2.71828"
 
     implementation "androidx.core:core-ktx:$core_version"
