@@ -32,7 +32,10 @@ class PostService(private val repository: PostRepository) {
             )
         )
         .let {
-            if (it.id == 0L) repository.save(it) else it.content = dto.content
+            if (it.id != 0L) {
+                it.content = dto.content
+            }
+            repository.save(it)
             it
         }.toDto()
 
