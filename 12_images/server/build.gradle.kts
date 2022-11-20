@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.7.2"
-    id("io.spring.dependency-management") version "1.1.0"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.7.10"
-    kotlin("jvm") version "1.7.10"
-    kotlin("plugin.spring") version "1.7.0"
+    id("org.springframework.boot") version "2.7.5"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.7.21"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.spring") version "1.7.21"
 }
 
 group = "ru.netology"
@@ -25,7 +25,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.apache.tika:tika-core:2.4.1")
+    implementation("org.apache.tika:tika-core:2.6.0")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
