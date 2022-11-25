@@ -1,7 +1,7 @@
 package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Comment
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 data class CommentEntity(

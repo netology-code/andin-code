@@ -1,9 +1,9 @@
 package ru.netology.nmedia.entity
 
+import jakarta.persistence.*
 import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
-import javax.persistence.*
 
 @Entity
 data class PostEntity(

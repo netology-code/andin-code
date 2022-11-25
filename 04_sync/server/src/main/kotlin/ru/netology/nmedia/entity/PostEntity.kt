@@ -1,10 +1,10 @@
 package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Post
-import javax.persistence.Id
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 
 @Entity
 data class PostEntity(

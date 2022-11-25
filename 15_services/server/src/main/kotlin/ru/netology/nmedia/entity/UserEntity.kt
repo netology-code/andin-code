@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import ru.netology.nmedia.dto.User
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 data class UserEntity(

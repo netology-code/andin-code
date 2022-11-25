@@ -1,6 +1,6 @@
 package ru.netology.nmedia.entity
 
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 data class PushTokenEntity(
