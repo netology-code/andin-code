@@ -3,10 +3,10 @@ package ru.netology.nmedia.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.PushMessage
 import ru.netology.nmedia.repository.PushTokenRepository
-import javax.transaction.Transactional
 import org.springframework.context.annotation.Lazy
 
 @Service

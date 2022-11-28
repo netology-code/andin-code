@@ -1,5 +1,6 @@
 package ru.netology.nmedia.service
 
+import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -22,7 +23,6 @@ import ru.netology.nmedia.repository.TokenRepository
 import ru.netology.nmedia.repository.UserRepository
 import java.security.SecureRandom
 import java.util.*
-import javax.transaction.Transactional
 
 @Service
 @Transactional

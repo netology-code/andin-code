@@ -1,10 +1,10 @@
 package ru.netology.nmedia.service
 
 import com.github.javafaker.Faker
+import jakarta.transaction.Transactional
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.Post
-import javax.transaction.Transactional
 
 @Service
 @Transactional
