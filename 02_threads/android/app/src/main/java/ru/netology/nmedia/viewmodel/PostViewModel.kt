@@ -1,6 +1,7 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
+import android.os.SystemClock.sleep
 import androidx.lifecycle.*
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.model.FeedModel
@@ -71,7 +72,20 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        thread {
+
+            val post = repository.likeById(id)
+
+            _data.postValue(_data.value?.posts?.map {
+                if (it.id != id) it else it.copy(
+                    likedByMe = !it.likedByMe,
+                    likes = if (!it.likedByMe) it.likes + 1 else it.likes - 1
+                )
+            }?.let { _data.value?.copy(posts = it) })
+            //sleep(6000)
+            //loadPosts()
+
+        }
     }
 
     fun removeById(id: Long) {
