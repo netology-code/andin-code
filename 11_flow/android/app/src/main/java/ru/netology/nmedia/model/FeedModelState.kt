@@ -1,7 +1,8 @@
 package ru.netology.nmedia.model
 
-data class FeedModelState(
-    val loading: Boolean = false,
-    val error: Boolean = false,
-    val refreshing: Boolean = false,
-)
+sealed interface FeedModelState {
+    object Idle : FeedModelState
+    object Loading : FeedModelState
+    object Refreshing : FeedModelState
+    object Error : FeedModelState
+}

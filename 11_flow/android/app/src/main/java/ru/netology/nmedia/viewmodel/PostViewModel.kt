@@ -57,21 +57,21 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadPosts() = viewModelScope.launch {
         try {
-            _dataState.value = FeedModelState(loading = true)
+            _dataState.value = FeedModelState.Loading
             repository.getAll()
-            _dataState.value = FeedModelState()
+            _dataState.value = FeedModelState.Idle
         } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
+            _dataState.value = FeedModelState.Error
         }
     }
 
     fun refreshPosts() = viewModelScope.launch {
         try {
-            _dataState.value = FeedModelState(refreshing = true)
+            _dataState.value = FeedModelState.Refreshing
             repository.getAll()
-            _dataState.value = FeedModelState()
+            _dataState.value = FeedModelState.Idle
         } catch (e: Exception) {
-            _dataState.value = FeedModelState(error = true)
+            _dataState.value = FeedModelState.Error
         }
     }
 
@@ -81,9 +81,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch {
                 try {
                     repository.save(it)
-                    _dataState.value = FeedModelState()
+                    _dataState.value = FeedModelState.Idle
                 } catch (e: Exception) {
-                    _dataState.value = FeedModelState(error = true)
+                    _dataState.value = FeedModelState.Error
                 }
             }
         }
