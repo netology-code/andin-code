@@ -5,6 +5,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.entity.AttachmentEmbeddable
 import ru.netology.nmedia.entity.PostEntity
 import ru.netology.nmedia.exception.NotFoundException
 import ru.netology.nmedia.repository.PostRepository
@@ -43,7 +44,10 @@ class PostService(
             )
         )
         .let {
-            if (it.id == 0L) repository.save(it) else it.content = dto.content
+            if (it.id == 0L) repository.save(it) else {
+                it.content = dto.content
+                it.attachment = AttachmentEmbeddable.fromDto(dto.attachment)
+            }
             it
         }.toDto()
 
