@@ -115,5 +115,27 @@
             app:icon="@drawable/ic_share_24"
             style="@style/Widget.AppTheme.IconButton"
             />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:contentDescription="@string/retry_loading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/footer"
+            app:icon="@drawable/baseline_refresh_24"
+            style="@style/Widget.AppTheme.IconButton"
+            />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            app:layout_constraintBottom_toBottomOf="@id/retry"
+            app:layout_constraintStart_toStartOf="@id/retry"
+            app:layout_constraintEnd_toEndOf="@id/retry"
+            app:layout_constraintTop_toBottomOf="@id/footer"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

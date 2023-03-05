@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import ru.netology.nmedia.BuildConfig
-import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.dto.PostDto
 
 private const val BASE_URL = "${BuildConfig.BASE_URL}/api/slow/"
 
@@ -29,22 +29,22 @@ private val retrofit = Retrofit.Builder()
 
 interface PostsApiService {
     @GET("posts")
-    suspend fun getAll(): Response<List<Post>>
+    suspend fun getAll(): Response<List<PostDto>>
 
     @GET("posts/{id}")
-    suspend fun getById(@Path("id") id: Long): Response<Post>
+    suspend fun getById(@Path("id") id: Long): Response<PostDto>
 
     @POST("posts")
-    suspend fun save(@Body post: Post): Response<Post>
+    suspend fun save(@Body post: PostDto): Response<PostDto>
 
     @DELETE("posts/{id}")
     suspend fun removeById(@Path("id") id: Long): Response<Unit>
 
     @POST("posts/{id}/likes")
-    suspend fun likeById(@Path("id") id: Long): Response<Post>
+    suspend fun likeById(@Path("id") id: Long): Response<PostDto>
 
     @DELETE("posts/{id}/likes")
-    suspend fun dislikeById(@Path("id") id: Long): Response<Post>
+    suspend fun dislikeById(@Path("id") id: Long): Response<PostDto>
 }
 
 object PostsApi {

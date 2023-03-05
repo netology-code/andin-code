@@ -1,6 +1,6 @@
 package ru.netology.nmedia.model
 
-data class FeedModelState(
+data class LoadingState(
     val loading: Boolean = false,
     val error: Boolean = false,
     val refreshing: Boolean = false,

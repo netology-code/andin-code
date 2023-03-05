@@ -3,13 +3,15 @@ package ru.netology.nmedia.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.model.Post
 import ru.netology.nmedia.view.loadCircleCrop
 
 interface OnInteractionListener {
@@ -17,6 +19,7 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onRetrySaving(post: Post) {}
 }
 
 class PostsAdapter(
@@ -46,6 +49,11 @@ class PostViewHolder(
             avatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+
+            progress.isVisible = post.state.loading
+            retry.isInvisible = !post.state.error
+
+            retry.setOnClickListener { onInteractionListener.onRetrySaving(post) }
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
@@ -80,7 +88,7 @@ class PostViewHolder(
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.localId == newItem.localId
     }
 
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
