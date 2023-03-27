@@ -26,7 +26,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     
-    implementation("org.apache.tika:tika-core:2.6.0")
+    implementation("org.apache.tika:tika-core:2.7.0")
     implementation("com.google.firebase:firebase-admin:9.1.1")
     runtimeOnly("com.h2database:h2")
     implementation("org.bouncycastle:bctls-jdk15on:1.70")
