@@ -71,7 +71,17 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        thread {
+            repository.likeById(id)
+            loadPosts() // обновление постов
+        }
+    }
+
+    fun deleteLikeById(id: Long) {
+        thread {
+            repository.deleteLikeById(id)
+            loadPosts() // обновление постов
+        }
     }
 
     fun removeById(id: Long) {

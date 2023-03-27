@@ -33,7 +33,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (post.likedByMe == false) {
+                    viewModel.likeById(post.id)
+                } else {
+                    viewModel.deleteLikeById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
