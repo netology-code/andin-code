@@ -44,14 +44,14 @@ class PostRepositoryImpl: PostRepository {
 
         client.newCall(request)
             .execute()
-            .close()
+            .let { it.body?.string() ?: throw java.lang.RuntimeException("body is null") }
+            .let { gson.fromJson(it, Post::class.java) }
     }
 
-    override fun deleteLikeById(id: Long) {
-        // Удаление лайка
+    override fun dislikeById(id: Long) {
         val request: Request = Request.Builder()
-            .delete()
-            .url("${BASE_URL}/api/posts/$id/likes")
+            .delete(gson.toJson(id).toRequestBody(jsonType))
+            .url("${BASE_URL}/api/slow/posts/$id/likes")
             .build()
         client.newCall(request)
             .execute()
