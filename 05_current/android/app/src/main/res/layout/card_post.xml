@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
-            app:constraint_referenced_ids="content" />
+            app:constraint_referenced_ids="attachmentTextView" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -114,6 +114,35 @@
             app:layout_constraintTop_toBottomOf="@id/footer"
             app:icon="@drawable/ic_share_24"
             style="@style/Widget.AppTheme.IconButton"
+            />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="attachmentImageView, attachmentTextView"/>
+
+        <ImageView
+            android:id="@+id/attachmentImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:layout_margin="@dimen/common_spacing"
+            android:src="@drawable/ic_netology_48dp"
+            app:layout_constraintBottom_toTopOf="@+id/like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/content" />
+
+        <TextView
+            android:text="123"
+            android:id="@+id/attachmentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/common_spacing"
+            app:layout_constraintTop_toBottomOf="@+id/attachmentImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

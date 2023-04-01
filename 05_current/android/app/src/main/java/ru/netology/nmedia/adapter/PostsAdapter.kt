@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import android.widget.Switch
+import com.bumptech.glide.Glide
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
@@ -35,6 +38,8 @@ class PostViewHolder(
     private val binding: CardPostBinding,
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
+
+    private var url = "http://192.168.0.103:9999"
 
     fun bind(post: Post) {
         binding.apply {
@@ -72,6 +77,25 @@ class PostViewHolder(
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
+
+            if (post.attachment != null){
+                group.visibility = View.VISIBLE
+
+            }
+            attachmentTextView.text = post.attachment?.description.toString()
+
+            Glide.with(binding.attachmentImageView)
+                .load("$url/images/${post.attachment?.url}")
+                .timeout(10_000)
+                .into(binding.attachmentImageView)
+
+            Glide.with(binding.avatar)
+                .load("$url/avatars/${post.authorAvatar}")
+                .placeholder(R.drawable.ic_download_24)
+                .error(R.drawable.ic_error_download_24)
+                .circleCrop()
+                .timeout(10_000)
+                .into(binding.avatar)
         }
     }
 }
