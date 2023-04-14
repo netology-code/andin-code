@@ -4,6 +4,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    namespace "ru.netology.nmedia"
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -27,6 +29,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     buildTypes {

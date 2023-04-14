@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+    namespace "ru.netology.nmedia"
+
     compileSdkVersion 33
 
     defaultConfig {
