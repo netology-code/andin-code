@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    namespace "ru.netology.nmedia"
+    namespace "ru.netology.handler"
 
     compileSdkVersion 33
 
