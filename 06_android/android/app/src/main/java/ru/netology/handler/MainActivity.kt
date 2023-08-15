@@ -1,15 +1,11 @@
 package ru.netology.handler
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.squareup.picasso.Picasso
-import okhttp3.*
+import com.bumptech.glide.request.target.DrawableImageViewTarget
 import ru.netology.handler.databinding.ActivityMainBinding
-import java.io.IOException
-import java.util.concurrent.TimeUnit
+import ru.netology.handler.glide.GlideApp
 
 class MainActivity : AppCompatActivity() {
     private val urls = listOf("netology.jpg", "sber.jpg", "tcs.jpg", "404.png")
@@ -25,21 +21,22 @@ class MainActivity : AppCompatActivity() {
                 index = 0
             }
 
-            val url = "http://10.0.2.2:9999/avatars/${urls[index++]}"
-//            Glide.with(binding.image)
-//                .load(url)
-//                .placeholder(R.drawable.ic_loading_100dp)
-//                .error(R.drawable.ic_error_100dp)
-//                .timeout(10_000)
-//                .into(binding.image)
+            // Пример загрузки с процентами
+            // Реализация основана на примерах https://github.com/TWiStErRob/glide-support/tree/main/src/glide3/java/com/bumptech/glide/supportapp/github/_232_progress
 
-            Picasso.get()
-                .load(url)
-                .error(R.drawable.ic_error_100dp)
-                .into(binding.image);
+            val url =
+                "https://www.learningcontainer.com/wp-content/uploads/2020/07/Large-Sample-Image-download-for-Testing.jpg"
+
+            CustomProgressTarget(
+                DrawableImageViewTarget(binding.image),
+                binding.progress,
+                binding.progressText,
+                url,
+            ).load()
         }
     }
 }
+
 
 /* First version
 class MainActivity : AppCompatActivity() {
