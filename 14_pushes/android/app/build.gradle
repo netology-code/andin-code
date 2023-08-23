@@ -32,34 +32,45 @@ android {
         buildConfig true
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../signing")
+            storePassword "92629c3d-0c3c-4c08-adc9-6cec36f988b6"
+            keyAlias "netology"
+            keyPassword "92629c3d-0c3c-4c08-adc9-6cec36f988b6"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.usesCleartextTraffic = false
             buildConfigField "String", "BASE_URL", '"https://netomedia.ru"'
+            signingConfig signingConfigs.release
         }
         debug {
             manifestPlaceholders.usesCleartextTraffic = true
             buildConfigField "String", "BASE_URL", '"http://10.0.2.2:9999"'
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    def core_version = "1.9.0"
-    def appcompat_version = "1.5.1"
+    def core_version = "1.10.1"
+    def appcompat_version = "1.6.1"
     def constraintlayout_version = "2.1.4"
     def swiperefreshlayout_version = "1.1.0"
     def coordinatorlayout_version = "1.2.0"
-    def recyclerview_version = "1.2.1"
+    def recyclerview_version = "1.3.1"
     def junit_version = "4.13.2"
     def ext_junit_version = "1.1.3"
     def espresso_core_version = "3.4.0"
-    def activity_version = "1.6.0"
+    def activity_version = "1.7.2"
     def lifecycle_version = "2.5.1"
-    def mdc_version = "1.6.1"
-    def nav_version = "2.5.2"
+    def mdc_version = "1.9.0"
+    def nav_version = "2.7.0"
     def room_version = "2.6.0-alpha02"
     def firebase_version = "30.3.1"
     def glide_version = "4.15.1"
@@ -68,7 +79,7 @@ dependencies {
     def okhttplogging_version = "4.11.0"
     def coroutines_version = "1.7.3"
     def imagepicker_version = "2.1"
-    def play_services_base_version = "18.1.0"
+    def play_services_base_version = "18.2.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
