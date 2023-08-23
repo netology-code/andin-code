@@ -32,27 +32,16 @@ android {
         buildConfig true
     }
 
-    signingConfigs {
-        release {
-            storeFile file("../signing")
-            storePassword "92629c3d-0c3c-4c08-adc9-6cec36f988b6"
-            keyAlias "netology"
-            keyPassword "92629c3d-0c3c-4c08-adc9-6cec36f988b6"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders.usesCleartextTraffic = false
             buildConfigField "String", "BASE_URL", '"https://netomedia.ru"'
-            signingConfig signingConfigs.release
         }
         debug {
             manifestPlaceholders.usesCleartextTraffic = true
             buildConfigField "String", "BASE_URL", '"http://10.0.2.2:9999"'
-            signingConfig signingConfigs.release
         }
     }
 }
