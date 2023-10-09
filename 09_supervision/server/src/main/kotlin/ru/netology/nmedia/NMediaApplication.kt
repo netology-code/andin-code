@@ -88,7 +88,6 @@ class NMediaApplication {
                     author = "Netology",
                     authorAvatar = "netology.jpg",
                     content = "Отлично!",
-                    published = 0,
                     likedByMe = false,
                     likes = 0,
                 )
@@ -100,7 +99,6 @@ class NMediaApplication {
                     author = "Сбер",
                     authorAvatar = "sber.jpg",
                     content = "Мы тоже обновились!",
-                    published = 0,
                     likedByMe = false,
                     likes = 0,
                 )
@@ -112,7 +110,6 @@ class NMediaApplication {
                     author = "Netology",
                     authorAvatar = "netology.jpg",
                     content = "Новый логотип прекрасен!",
-                    published = 0,
                     likedByMe = false,
                     likes = 0,
                 )

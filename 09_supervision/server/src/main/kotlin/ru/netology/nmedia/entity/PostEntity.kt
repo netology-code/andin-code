@@ -7,40 +7,57 @@ import jakarta.persistence.*
 
 @Entity
 data class PostEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long,
-    var author: String,
-    var authorAvatar: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
+    val author: String,
+    val authorAvatar: String,
     @Column(columnDefinition = "TEXT")
-    var content: String,
-    var published: Long,
-    var likedByMe: Boolean,
-    var likes: Int = 0,
+    val content: String,
+    val published: Long,
+    val likedByMe: Boolean,
+    val likes: Int = 0,
     @Embedded
-    var attachment: AttachmentEmbeddable?,
+    val attachment: AttachmentEmbeddable?,
+    @OneToMany(
+        mappedBy = "post",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true,
+        fetch = FetchType.LAZY,
+    )
+    val comments: List<CommentEntity> = emptyList(),
 ) {
-    fun toDto() = Post(id, author, authorAvatar, content, published, likedByMe, likes, attachment?.toDto())
+    fun toDto() = Post(
+        id = id,
+        author = author,
+        authorAvatar = authorAvatar,
+        content = content,
+        published = published,
+        likedByMe = likedByMe,
+        likes = likes,
+        attachment = attachment?.toDto()
+    )
 
     companion object {
         fun fromDto(dto: Post) = PostEntity(
-            dto.id,
-            dto.author,
-            dto.authorAvatar,
-            dto.content,
-            dto.published,
-            dto.likedByMe,
-            dto.likes,
-            AttachmentEmbeddable.fromDto(dto.attachment),
+            id = dto.id,
+            author = dto.author,
+            authorAvatar = dto.authorAvatar,
+            content = dto.content,
+            published = dto.published,
+            likedByMe = dto.likedByMe,
+            likes = dto.likes,
+            attachment = AttachmentEmbeddable.fromDto(dto.attachment),
         )
     }
 }
 
 @Embeddable
 data class AttachmentEmbeddable(
-    var url: String,
+    val url: String,
     @Column(columnDefinition = "TEXT")
-    var description: String?,
+    val description: String?,
     @Enumerated(EnumType.STRING)
-    var type: AttachmentType,
+    val type: AttachmentType,
 ) {
     fun toDto() = Attachment(url, description, type)
 

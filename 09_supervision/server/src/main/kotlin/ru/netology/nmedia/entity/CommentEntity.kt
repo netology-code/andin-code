@@ -2,31 +2,42 @@ package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Comment
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 data class CommentEntity(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long,
-    var postId: Long, // no relations for simplicity
-    var author: String,
-    var authorAvatar: String,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,
+    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val post: PostEntity,
+    val author: String,
+    val authorAvatar: String,
     @Column(columnDefinition = "TEXT")
-    var content: String,
-    var published: Long,
-    var likedByMe: Boolean,
-    var likes: Int = 0,
+    val content: String,
+    val published: Instant,
+    val likedByMe: Boolean,
+    val likes: Int = 0,
 ) {
-    fun toDto() = Comment(id, postId, author, authorAvatar, content, published, likedByMe, likes)
+    fun toDto() = Comment(
+        id = id,
+        postId = post.id,
+        author = author,
+        authorAvatar = authorAvatar,
+        content = content,
+        published = published,
+        likedByMe = likedByMe,
+        likes = likes
+    )
 
     companion object {
-        fun fromDto(dto: Comment) = CommentEntity(
-            dto.id,
-            dto.postId,
-            dto.author,
-            dto.authorAvatar,
-            dto.content,
-            dto.published,
-            dto.likedByMe,
-            dto.likes,
+        fun fromDto(dto: Comment, post: PostEntity) = CommentEntity(
+            id = dto.id,
+            post = post,
+            author = dto.author,
+            authorAvatar = dto.authorAvatar,
+            content = dto.content,
+            published = dto.published,
+            likedByMe = dto.likedByMe,
+            likes = dto.likes,
         )
     }
 }

@@ -37,8 +37,9 @@ class PostService(
             )
         )
         .let {
-            if (it.id == 0L) repository.save(it) else it.content = dto.content
-            it
+            val entity = if (it.id == 0L) it else it.copy(content = dto.content)
+            repository.save(entity)
+            entity
         }.toDto()
 
     fun removeById(id: Long) {
@@ -50,18 +51,24 @@ class PostService(
     fun likeById(id: Long): Post = repository
         .findById(id)
         .orElseThrow(::NotFoundException)
-        .apply {
-            likes += 1
-            likedByMe = true
+        .run {
+            copy(
+                likes = likes + 1,
+                likedByMe = true
+            )
         }
+        .also(repository::save)
         .toDto()
 
     fun unlikeById(id: Long): Post = repository
         .findById(id)
         .orElseThrow(::NotFoundException)
-        .apply {
-            likes -= 1
-            likedByMe = false
+        .run {
+            copy(
+                likes = likes - 1,
+                likedByMe = false
+            )
         }
+        .also(repository::save)
         .toDto()
 }

@@ -11,7 +11,8 @@ class CommentController(private val service: CommentService) {
     fun getAllByPostId(@PathVariable postId: Long) = service.getAllByPostId(postId)
 
     @PostMapping
-    fun save(@RequestBody dto: Comment) = service.save(dto)
+    fun save(@RequestBody dto: Comment, @PathVariable postId: Long) =
+        service.save(dto.copy(postId = postId))
 
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: Long) = service.removeById(id)
