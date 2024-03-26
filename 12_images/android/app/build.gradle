@@ -63,7 +63,7 @@ dependencies {
     def firebase_version = "32.8.0"
     def glide_version = "4.16.0"
     def retrofit_version = "2.10.0"
-    def retrofitgson_version = "2.9.0"
+    def retrofitgson_version = "2.10.0"
     def okhttplogging_version = "4.12.0"
     def coroutines_version = "1.7.3"
     def imagepicker_version = "2.1"
