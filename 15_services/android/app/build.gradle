@@ -68,7 +68,7 @@ dependencies {
     def coroutines_version = "1.8.0"
     def imagepicker_version = "2.1"
     def workmanager_version = "2.9.0"
-    def play_services_base_version = "18.4.0"
+    def play_services_base_version = "18.5.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
