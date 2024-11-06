@@ -56,7 +56,7 @@ dependencies {
     def mdc_version = "1.12.0"
     def gson_version = "2.11.0"
     def nav_version = "2.7.7"
-    def room_version = "2.7.0-alpha02"
+    def room_version = "2.7.0-alpha11"
     def firebase_version = "33.5.1"
     def okhttp_version = "4.12.0"
     def play_services_base_version = "18.4.0"
