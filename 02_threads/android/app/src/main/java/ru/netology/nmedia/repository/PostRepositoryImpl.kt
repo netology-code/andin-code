@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import ru.netology.nmedia.dto.Post
+import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
@@ -35,8 +36,49 @@ class PostRepositoryImpl: PostRepository {
             }
     }
 
-    override fun likeById(id: Long) {
-        // TODO: do this in homework
+    fun replacePostInList(likedPost: Post, posts: List<Post>): List<Post> {
+        if (likedPost == null) {
+            return posts
+        }
+        val updatedPosts = posts.toMutableList()
+        val index = updatedPosts.indexOfFirst { it.id == likedPost.id }
+        if (index != -1) {
+            updatedPosts[index] = likedPost
+        }
+        return updatedPosts
+    }
+
+    override fun likeById(id: Long): Post? {
+        val request: Request = Request.Builder()
+            .post(gson.toJson("").toRequestBody(jsonType))
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+        return client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) {
+                throw IOException("Unexpected code $response")
+            }
+            val responseBody = response.body?.string()
+            responseBody?.let {
+                gson.fromJson(it, Post::class.java)
+            }
+        }
+    }
+
+    override fun unLikeById(id: Long): Post? {
+        val request: Request = Request.Builder()
+            .delete()
+            .url("${BASE_URL}/api/posts/$id/likes")
+            .build()
+
+        return client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) {
+                throw IOException("Unexpected code $response")
+            }
+            val responseBody = response.body?.string()
+            responseBody?.let {
+                gson.fromJson(it, Post::class.java)
+            }
+        }
     }
 
     override fun save(post: Post) {
