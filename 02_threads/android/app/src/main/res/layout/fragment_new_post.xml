@@ -12,16 +12,14 @@
         android:layout_height="match_parent"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:background="@android:color/transparent"
-        />
+        android:background="@android:color/transparent" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-        />
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ok"
@@ -29,7 +27,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/description_post_save"
         app:srcCompat="@drawable/ic_ok_24dp"
-        app:layout_anchor="@id/bottomAppBar"
-        />
+        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
