@@ -10,7 +10,6 @@ import ru.netology.nmedia.repository.PostRepository
 import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
 import java.io.IOException
-import kotlin.concurrent.thread
 
 private val empty = Post(
     id = 0,
@@ -37,26 +36,22 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun loadPosts() {
-        thread {
-            // Начинаем загрузку
-            _data.postValue(FeedModel(loading = true))
-            try {
-                // Данные успешно получены
-                val posts = repository.getAll()
-                FeedModel(posts = posts, empty = posts.isEmpty())
-            } catch (e: IOException) {
-                // Получена ошибка
-                FeedModel(error = true)
-            }.also(_data::postValue)
-        }
+        _data.value = FeedModel(loading = true)
+        repository.getAllAsync(object : PostRepository.GetAllCallback {
+            override fun onSuccess(posts: List<Post>) {
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            }
+
+            override fun onError(e: Exception) {
+                _data.postValue(FeedModel(error = true))
+            }
+        })
     }
 
     fun save() {
         edited.value?.let {
-            thread {
-                repository.save(it)
-                _postCreated.postValue(Unit)
-            }
+            repository.save(it)
+            _postCreated.postValue(Unit)
         }
         edited.value = empty
     }
@@ -74,37 +69,47 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        var post: Post?
         val tmp = _data.value?.posts?.toMutableList()
         val index = _data.value?.posts?.indexOfFirst { it.id == id }
         if (index != -1) {
-            val thread = Thread {
-                if (!_data.value!!.posts[index!!].likedByMe) {
-                    post = repository.likeById(id)
-                } else {
-                    post = repository.unLikeById(id)
-                }
-                tmp?.set(index, post!!)
-                _data.postValue(tmp?.let { FeedModel(it, false) })
+            if (!_data.value!!.posts[index!!].likedByMe) {
+                repository.likeById(id, object : PostRepository.GetCallback {
+                    override fun onSuccess(post: Post) {
+                        tmp?.set(index, post)
+                        _data.postValue(tmp?.let { FeedModel(it, false) })
+                    }
+
+                    override fun onError(e: Exception) {
+                        _data.postValue(FeedModel(error = true))
+                    }
+                })
+            } else {
+                repository.unLikeById(id, object : PostRepository.GetCallback {
+                    override fun onSuccess(post: Post) {
+                        tmp?.set(index, post)
+                        _data.postValue(tmp?.let { FeedModel(it, false) })
+                    }
+
+                    override fun onError(e: Exception) {
+                        _data.postValue(FeedModel(error = true))
+                    }
+                })
             }
-            thread.start()
         }
     }
 
     fun removeById(id: Long) {
-        thread {
-            // Оптимистичная модель
-            val old = _data.value?.posts.orEmpty()
-            _data.postValue(
-                _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .filter { it.id != id }
-                )
+        // Оптимистичная модель
+        val old = _data.value?.posts.orEmpty()
+        _data.postValue(
+            _data.value?.copy(posts = _data.value?.posts.orEmpty()
+                .filter { it.id != id }
             )
-            try {
-                repository.removeById(id)
-            } catch (e: IOException) {
-                _data.postValue(_data.value?.copy(posts = old))
-            }
+        )
+        try {
+            repository.removeById(id)
+        } catch (e: IOException) {
+            _data.postValue(_data.value?.copy(posts = old))
         }
     }
 }
