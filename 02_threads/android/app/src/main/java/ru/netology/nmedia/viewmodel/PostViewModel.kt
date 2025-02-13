@@ -69,32 +69,39 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        val tmp = _data.value?.posts?.toMutableList()
-        val index = _data.value?.posts?.indexOfFirst { it.id == id }
-        if (index != -1) {
-            if (!_data.value!!.posts[index!!].likedByMe) {
-                repository.likeById(id, object : PostRepository.GetCallback {
-                    override fun onSuccess(post: Post) {
-                        tmp?.set(index, post)
-                        _data.postValue(tmp?.let { FeedModel(it, false) })
-                    }
-
-                    override fun onError(e: Exception) {
-                        _data.postValue(FeedModel(error = true))
-                    }
-                })
-            } else {
-                repository.unLikeById(id, object : PostRepository.GetCallback {
-                    override fun onSuccess(post: Post) {
-                        tmp?.set(index, post)
-                        _data.postValue(tmp?.let { FeedModel(it, false) })
-                    }
-
-                    override fun onError(e: Exception) {
-                        _data.postValue(FeedModel(error = true))
-                    }
-                })
-            }
+        val likedByMe = _data.value?.posts?.find { it.id == id }?.likedByMe ?: return
+        if (!likedByMe) {
+            repository.likeById(id, object : PostRepository.GetCallback {
+                override fun onSuccess(post: Post) {
+                    _data.postValue(
+                        _data.value?.copy(
+                            posts = _data.value?.posts.orEmpty().map {
+                                if (it.id == id) post else it
+                            },
+                            loading = false
+                        )
+                    )
+                }
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
+        } else {
+            repository.unLikeById(id, object : PostRepository.GetCallback {
+                override fun onSuccess(post: Post) {
+                    _data.postValue(
+                        _data.value?.copy(
+                            posts = _data.value?.posts.orEmpty().map {
+                                if (it.id == id) post else it
+                            },
+                            loading = false
+                        )
+                    )
+                }
+                override fun onError(e: Exception) {
+                    _data.postValue(FeedModel(error = true))
+                }
+            })
         }
     }
 
