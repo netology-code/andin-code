@@ -56,7 +56,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun save() {
         edited.value?.let {
             repository.save(it, object : PostRepository.Callback<Post> {
-                // TODO:
             })
             _postCreated.value = Unit
         }
