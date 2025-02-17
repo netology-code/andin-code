@@ -31,6 +31,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val _postCreated = SingleLiveEvent<Unit>()
     val postCreated: LiveData<Unit>
         get() = _postCreated
+    private val _singleError = SingleLiveEvent<Unit>()
+    val singleError: LiveData<Unit>
+        get() = _singleError
 
     init {
         loadPosts()
@@ -38,21 +41,24 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadPosts() {
         _data.value = FeedModel(loading = true)
-        repository.getAllAsync(object : PostRepository.GetAllCallback {
+        repository.getAllAsync(object : PostRepository.Callback<List<Post>> {
             override fun onSuccess(posts: List<Post>) {
-                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+                _data.value = FeedModel(posts = posts, empty = posts.isEmpty())
             }
 
             override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+                _singleError.postValue(Unit)
+                _data.value = FeedModel(error = true)
             }
         })
     }
 
     fun save() {
         edited.value?.let {
-            repository.save(it)
-            _postCreated.postValue(Unit)
+            repository.save(it, object : PostRepository.Callback<Post> {
+                // TODO:
+            })
+            _postCreated.value = Unit
         }
         edited.value = empty
     }
@@ -72,7 +78,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun likeById(id: Long) {
         val likedByMe = _data.value?.posts?.find { it.id == id }?.likedByMe ?: return
         if (!likedByMe) {
-            repository.likeById(id, object : PostRepository.GetCallback {
+            repository.likeById(id, object : PostRepository.Callback<Post> {
                 override fun onSuccess(post: Post) {
                     _data.postValue(
                         _data.value?.copy(
@@ -83,12 +89,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                         )
                     )
                 }
+
                 override fun onError(e: Exception) {
+                    _singleError.postValue(Unit)
                     _data.postValue(FeedModel(error = true))
                 }
             })
         } else {
-            repository.unLikeById(id, object : PostRepository.GetCallback {
+            repository.unLikeById(id, object : PostRepository.Callback<Post> {
                 override fun onSuccess(post: Post) {
                     _data.postValue(
                         _data.value?.copy(
@@ -99,7 +107,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                         )
                     )
                 }
+
                 override fun onError(e: Exception) {
+                    _singleError.postValue(Unit)
                     _data.postValue(FeedModel(error = true))
                 }
             })
@@ -115,8 +125,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             )
         )
         try {
-            repository.removeById(id)
+            repository.removeById(id, object : PostRepository.Callback<Unit> {})
         } catch (e: IOException) {
+            _singleError.postValue(Unit)
             _data.postValue(_data.value?.copy(posts = old))
         }
     }
