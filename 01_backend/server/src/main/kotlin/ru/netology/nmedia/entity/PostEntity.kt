@@ -1,6 +1,7 @@
 package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Post
+import jakarta.persistence.Column
 import jakarta.persistence.Id
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType
 data class PostEntity(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,
         var author: String,
+        @Column(columnDefinition = "TEXT")
         var content: String,
         var published: Long,
         var likedByMe: Boolean,
