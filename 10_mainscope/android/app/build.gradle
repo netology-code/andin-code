@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    def core_version = "1.15.0"
+    def core_version = "1.16.0"
     def appcompat_version = "1.7.0"
     def constraintlayout_version = "2.2.1"
     def swiperefreshlayout_version = "1.1.0"
