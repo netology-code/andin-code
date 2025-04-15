@@ -67,7 +67,7 @@ dependencies {
     def retrofitgson_version = "2.11.0"
     def okhttplogging_version = "4.12.0"
     def coroutines_version = "1.9.0"
-    def play_services_base_version = "18.6.0"
+    def play_services_base_version = "18.7.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
