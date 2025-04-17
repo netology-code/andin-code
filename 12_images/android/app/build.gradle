@@ -18,6 +18,8 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -69,6 +71,7 @@ dependencies {
     def imagepicker_version = "2.1"
     def fragment_version = "1.8.6"
     def play_services_base_version = "18.7.0"
+    def core_desugaring_version = "2.1.5"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
@@ -96,6 +99,7 @@ dependencies {
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$core_desugaring_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"

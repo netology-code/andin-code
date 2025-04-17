@@ -19,6 +19,8 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -60,6 +62,7 @@ dependencies {
     def firebase_version = "33.12.0"
     def okhttp_version = "4.12.0"
     def play_services_base_version = "18.7.0"
+    def core_desugaring_version = "2.1.5"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
@@ -81,6 +84,7 @@ dependencies {
     implementation "com.google.firebase:firebase-messaging-ktx"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$core_desugaring_version"
 
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test.ext:junit:$ext_junit_version"
