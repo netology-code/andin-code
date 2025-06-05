@@ -69,7 +69,7 @@ dependencies {
     def okhttplogging_version = "4.12.0"
     def coroutines_version = "1.10.2"
     def imagepicker_version = "2.1"
-    def fragment_version = "1.8.6"
+    def fragment_version = "1.8.8"
     def play_services_base_version = "18.7.0"
     def core_desugaring_version = "2.1.5"
 
