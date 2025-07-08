@@ -71,7 +71,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        Thread {
+            repository.likeById(id)
+            val updatedPosts = repository.getAll()
+            _data.postValue(FeedModel(posts = updatedPosts))
+        }.start()
     }
 
     fun removeById(id: Long) {
