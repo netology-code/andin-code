@@ -75,13 +75,28 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         _data.postValue(
             FeedModel(
                 posts = currentPosts.map { post ->
-                    if (post.id == id) post.copy(likedByMe = !post.likedByMe)
-                    else post
+                    if (post.id == id) {
+
+                        val liked = post.likedByMe
+                        post.copy(
+                            likedByMe = !liked,
+                            likes = if (liked) post.likes - 1 else post.likes + 1
+                        )
+                    } else post
                 }.toList()
             )
         )
         Thread {
-            repository.likeById(id)
+            try {
+                repository.likeById(id)
+            } catch (e: IOException) {
+
+                _data.postValue(
+                    FeedModel(
+                        posts = currentPosts
+                    )
+                )
+            }
         }.start()
     }
 

@@ -36,25 +36,26 @@ class PostRepositoryImpl: PostRepository {
     }
 
     override fun likeById(id: Long) {
-        Thread {
-            val posts = getAll()
-            val post = posts.find { it.id == id } ?: return@Thread
-            val liked = post.likedByMe
-            val  request = if (!liked){
-                Request.Builder()
-                    .post("".toRequestBody("application/json".toMediaType()))
-                    .url("${BASE_URL}/api/posts/$id/likes")
-                    .build()
-            } else {
-                Request.Builder()
-                    .delete()
-                    .url("${BASE_URL}/api/posts/$id/likes")
-                    .build()
-            }
-            client.newCall(request).execute()
+        val posts = getAll()
+        val post = posts.find { it.id == id } ?: throw RuntimeException("Пост не найден")
+        val request = if (post.likedByMe) {
 
-        }.start()
+            Request.Builder()
+                .delete()
+                .url("$BASE_URL/api/posts/$id/likes")
+                .build()
+        } else {
+
+            Request.Builder()
+                .post("".toRequestBody())
+                .url("$BASE_URL/api/posts/$id/likes")
+                .build()
+        }
+
+        client.newCall(request)
+            .execute()
     }
+
     override fun save(post: Post) {
         val request: Request = Request.Builder()
             .post(gson.toJson(post).toRequestBody(jsonType))
