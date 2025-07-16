@@ -1,78 +1,106 @@
 package ru.netology.nmedia.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import ru.netology.nmedia.dto.Post
-import ru.netology.nmedia.model.FeedModel
-import ru.netology.nmedia.repository.*
+import ru.netology.nmedia.model.FeedState
+import ru.netology.nmedia.repository.PostRepository
+import ru.netology.nmedia.repository.PostRepositoryImpl
 import ru.netology.nmedia.util.SingleLiveEvent
-import java.io.IOException
-import kotlin.concurrent.thread
 
 private val empty = Post(
-    id = 0,
-    content = "",
+    id = 0L,
     author = "",
-    likedByMe = false,
+    content = "",
+    published = "",
     likes = 0,
-    published = ""
+    likedByMe = false,
+    sharedByMe = false
 )
-
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    // упрощённый вариант
     private val repository: PostRepository = PostRepositoryImpl()
-    private val _data = MutableLiveData(FeedModel())
-    val data: LiveData<FeedModel>
-        get() = _data
-    val edited = MutableLiveData(empty)
+    private val _data = MutableLiveData(FeedState())
+    val data: LiveData<FeedState> = _data
+
     private val _postCreated = SingleLiveEvent<Unit>()
-    val postCreated: LiveData<Unit>
-        get() = _postCreated
+    val postCreated: LiveData<Unit> = _postCreated
 
     init {
-        loadPosts()
+        load()
     }
 
-    fun loadPosts() {
-        _data.value = FeedModel(loading = true)
-        repository.getAllAsync(object : PostRepository.GetAllCallback {
-            override fun onSuccess(posts: List<Post>) {
-                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+    fun load() {
+        _data.postValue(FeedState(loading = true))
+
+        repository.getAllAsync(
+            object : PostRepository.PostCallback<List<Post>> {
+                override fun onSuccess(result: List<Post>) {
+                    _data.value = (FeedState(posts = result, empty = result.isEmpty()))
+                }
+
+                override fun onError(error: Throwable) {
+                    _data.value = (FeedState(error = true))
+                }
+
+            })
+    }
+
+    val edited = MutableLiveData(empty)
+
+    fun likeByID(id: Long) {
+        val currentState = _data.value ?: return
+        val posts = currentState.posts
+
+
+        val post = posts.find { it.id == id } ?: return
+        val likedByMe = post.likedByMe
+
+        repository.likeByID(id, likedByMe, object : PostRepository.PostCallback<Post> {
+            override fun onSuccess(result: Post) {
+                val refreshState = _data.value ?: return
+                val updatedPosts = refreshState.posts.map {
+                    if (it.id == result.id) result else it
+                }
+                _data.postValue(refreshState.copy(posts = updatedPosts))
             }
 
-            override fun onError(e: Exception) {
-                _data.postValue(FeedModel(error = true))
+
+            override fun onError(error: Throwable) {
+                _data.value
             }
+
         })
     }
+    fun shareByID(id: Long) = repository.shareByID(id)
 
-    fun save() {
-        edited.value?.let { data ->
-            val client = OkHttpClient()
-            val requestBody = data.toString().toRequestBody("application/json".toVediaType))
-            .url()
-            .post(requestBody)
-            .build()
 
-            client.newCall(request).enqueue(object : CallBack{
-                override fun onFailure(call: Call, e : IOExceptoin){
-                Log.e("SaveError", e)}
+    fun removeByID(id: Long) {
+        val currentState = _data.value ?: return
+        _data.postValue(currentState.copy(posts = currentState.posts.filter { it.id != id }))
+
+        repository.removeByID(id, object : PostRepository.PostCallback<Unit> {
+            override fun onSuccess(result: Unit) {
+
             }
-                    override fun onResponse(call: Call, response: response){
-                        if(response.isSuccessful){
-                            _postCreated.postValue(unit)
-                        } else{
-                            Log.e("SaveError", e)
-                        }
+
+            override fun onError(error: Throwable) {
+                _data.postValue(currentState)
             }
+
         })
-          edit.value = empty
+
     }
 
-    fun edit(post: Post) {
+
+
+    fun edit(post: Post){
         edited.value = post
     }
-
+    fun clear() {
+        edited.value = empty
+    }
     fun changeContent(content: String) {
         val text = content.trim()
         if (edited.value?.content == text) {
@@ -81,43 +109,22 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        val request = Request.Builder()
-            .url(url)
-            .post(RequestBody.create(null,""))
-            .build()
-        client.newCall(request).enqueue(object: CallBack{
-            override fun onFailure(call: CAll, e: IOException){
-                Log.e("LikeError","Failed to like post $id", e)
-            }
-            override fun onResponse(call: Call, response: Response){
-                if(!response.isSuccessful){
-                    Log.e("LikeError","Failed to like post $id: ${response.code}")
+
+    fun save() {
+        edited.value?.let {
+            repository.save(it, object : PostRepository.PostCallback<Post> {
+                override fun onSuccess(result: Post) {
+
+                    _postCreated.postValue(Unit)
                 }
-            }
-        })
-    }
 
-    fun removeById(id: Long) {
+                override fun onError(e: Throwable) {
+                    _data.value
 
-            val old = _data.value?.posts.orEmpty()
-        val request = Request.Builder()
-            .url(url)
-            .delete
-            .build()
-
-        client.newCall(request).enqueue(object: Callback{
-            override fun omFailure(call: Call, e: IOException){
-                _data.postValue(_data.value?.copy(posts = oldPosts))
-            }
-            override fun onResponse(call: Call, response: Response){
-                if(!response.isSuccessful){
-                    _data.postValue(_data.value?copy(posts = oldPosts))
-                    Log.e("RemoveError", "Server Error")
-            }
-        })
-
-            }
+                }
+            })
         }
+        edited.value = empty
+    }
 
 }
