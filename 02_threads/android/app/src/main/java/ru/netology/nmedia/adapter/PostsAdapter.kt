@@ -60,6 +60,7 @@ class PostViewHolder(
                 .placeholder(R.drawable.ic_loading_100dp)
                 .error(R.drawable.ic_error_100dp)
                 .circleCrop()
+                .timeout(10_000)
                 .into(avatar)
 
 
