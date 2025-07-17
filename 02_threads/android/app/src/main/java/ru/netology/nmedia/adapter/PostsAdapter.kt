@@ -55,6 +55,7 @@ class PostViewHolder(
             like.text = post.likes.toString()
 
 
+
             Glide.with(avatar)
                 .load("$baseUrl/avatars/${post.authorAvatar}")
                 .placeholder(R.drawable.ic_loading_100dp)
@@ -64,6 +65,8 @@ class PostViewHolder(
                 .into(avatar)
 
 
+
+            
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_post)
