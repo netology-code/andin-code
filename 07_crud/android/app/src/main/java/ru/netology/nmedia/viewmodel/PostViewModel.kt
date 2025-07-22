@@ -31,6 +31,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> get() = _errorMessage
+
     init {
         loadPosts()
     }
@@ -49,12 +52,33 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        edited.value?.let {
-            repository.save(it, object : PostRepository.Callback<Post> {
-               // TODO:
+        edited.value?.let { post ->
+            repository.save(post, object : PostRepository.Callback<Post> {
+                override fun onSuccess(result: Post) {
+
+                    val currentData = _data.value ?: return
+                    val updatedPosts = currentData.posts?.toMutableList() ?: mutableListOf()
+
+
+                    val index = updatedPosts.indexOfFirst { it.id == result.id }
+                    if (index != -1) {
+
+                        updatedPosts[index] = result
+                    } else {
+
+                        updatedPosts.add(0, result)
+                    }
+
+                    _data.value = currentData.copy(posts = updatedPosts)
+                    _postCreated.value = Unit
+                }
+
+                override fun onError(e: Exception) {
+                    _errorMessage.value = "Ошибка при сохранении поста"
+                }
             })
-            _postCreated.value = Unit
         }
+
         edited.value = empty
     }
 
@@ -72,13 +96,39 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long) {
         repository.likeById(id, object : PostRepository.Callback<Post> {
-            // TODO:
+            override fun onSuccess(result: Post) {
+                val currentData = _data.value ?: return
+                val updatedPosts = currentData.posts?.map { post ->
+                    if (post.id == result.id) {
+                        post.copy(
+                            likes = post.likes + 1,
+                            likedByMe = true
+                        )
+                    } else {
+                        post
+                    }
+                }
+                _data.value = currentData.copy(posts = updatedPosts ?: emptyList())
+            }
+
+            override fun onError(e: Exception) {
+
+                _errorMessage.value = "Ошибка при лайке поста"
+            }
         })
     }
 
     fun removeById(id: Long) {
         repository.removeById(id, object : PostRepository.Callback<Unit> {
-            // TODO
+            override fun onSuccess(result: Unit) {
+                val currentData = _data.value ?: return
+                val updatedPosts = currentData.posts?.filter { it.id != id }
+                _data.value = currentData.copy(posts = updatedPosts ?: emptyList())
+            }
+
+            override fun onError(e: Exception) {
+                _errorMessage.value = "Ошибка при удалении поста"
+            }
         })
     }
 }

@@ -9,7 +9,7 @@ interface PostRepository {
     fun likeById(id: Long, callback: Callback<Post>)
 
     interface Callback<T> {
-        fun onSuccess(posts: T) {}
-        fun onError(e: Exception) {}
+        fun onSuccess(posts: T)
+        fun onError(e: Exception)
     }
 }

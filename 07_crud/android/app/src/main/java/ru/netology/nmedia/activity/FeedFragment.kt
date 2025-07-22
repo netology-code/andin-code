@@ -15,7 +15,8 @@ import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
-
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 class FeedFragment : Fragment() {
 
     private val viewModel: PostViewModel by activityViewModels()
@@ -67,7 +68,14 @@ class FeedFragment : Fragment() {
         binding.fab.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
 
+            message?.let {
+                if (it.isNotBlank()) {
+                    Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                }
+            }
+        }
         return binding.root
     }
 }
