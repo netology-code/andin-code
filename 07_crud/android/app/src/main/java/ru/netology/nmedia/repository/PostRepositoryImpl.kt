@@ -7,6 +7,9 @@ import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dto.Post
 import java.lang.RuntimeException
 
+
+
+
 class PostRepositoryImpl : PostRepository {
 
     override fun getAllAsync(callback: PostRepository.Callback<List<Post>>) {
