@@ -18,8 +18,8 @@ class PostRepositoryImpl: PostRepository {
     private val typeToken = object : TypeToken<List<Post>>() {}
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:9999"
-        private val jsonType = "application/json".toMediaType()
+        const val BASE_URL = "http://10.0.2.2:9999"
+        private  val jsonType = "application/json".toMediaType()
     }
 
     override fun getAll(): List<Post> {
@@ -36,7 +36,24 @@ class PostRepositoryImpl: PostRepository {
     }
 
     override fun likeById(id: Long) {
-        // TODO: do this in homework
+        val posts = getAll()
+        val post = posts.find { it.id == id } ?: throw RuntimeException("Пост не найден")
+        val request = if (post.likedByMe) {
+
+            Request.Builder()
+                .delete()
+                .url("$BASE_URL/api/posts/$id/likes")
+                .build()
+        } else {
+
+            Request.Builder()
+                .post("".toRequestBody())
+                .url("$BASE_URL/api/posts/$id/likes")
+                .build()
+        }
+
+        client.newCall(request)
+            .execute()
     }
 
     override fun save(post: Post) {
