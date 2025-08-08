@@ -63,20 +63,21 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override suspend fun likeById(id: Long) {
-        try {
 
-            val allPosts = dao.getAll().value ?: throw IllegalArgumentException("No posts found")
-            val postEntity = allPosts.find { it.id == id } ?: throw IllegalArgumentException("Post not found")
-            val liked = !postEntity.likedByMe
-            val likesCount = if (liked) postEntity.likes + 1 else postEntity.likes - 1
+            try {
 
-            val updatedPost = postEntity.copy(
-                likedByMe = liked,
-                likes = likesCount
-            )
+                val postEntity = dao.getById(id) ?: throw IllegalArgumentException("No posts found")
+                //val postEntity = allPosts.find { it.id == id } ?: throw IllegalArgumentException("Post not found")
+                val liked = !postEntity.likedByMe
+                val likesCount = if (liked) postEntity.likes + 1 else postEntity.likes - 1
+
+                val updatedPost = postEntity.copy(
+                    likedByMe = liked,
+                    likes = likesCount
+                )
 
 
-            dao.insert(updatedPost)
+                dao.insert(updatedPost)
 
 
             val response = if (liked) {
