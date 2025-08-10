@@ -64,10 +64,9 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
     override suspend fun likeById(id: Long) {
 
-            try {
+            val postEntity = dao.getById(id) ?: return
 
-                val postEntity = dao.getById(id) ?: throw IllegalArgumentException("No posts found")
-                //val postEntity = allPosts.find { it.id == id } ?: throw IllegalArgumentException("Post not found")
+            try {
                 val liked = !postEntity.likedByMe
                 val likesCount = if (liked) postEntity.likes + 1 else postEntity.likes - 1
 
@@ -76,27 +75,32 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                     likes = likesCount
                 )
 
+                dao.insert(updatedPost)
+
 
                 dao.insert(updatedPost)
 
 
-            val response = if (liked) {
-                PostsApi.service.likeById(id)
-            } else {
-                PostsApi.service.dislikeById(id)
+                val response = if (liked) {
+                    PostsApi.service.likeById(id)
+                } else {
+                    PostsApi.service.dislikeById(id)
+                }
+
+                if (!response.isSuccessful) {
+                    throw ApiError(response.code(), response.message())
+                }
+
+                val body = response.body() ?: throw ApiError(response.code(), response.message())
+                dao.insert(PostEntity.fromDto(body))
+
+            } catch (e: IOException) {
+                dao.insert(postEntity)
+                throw NetworkError
+            } catch (e: Exception) {
+                dao.insert(postEntity)
+                throw UnknownError
             }
-
-            if (!response.isSuccessful) {
-                throw ApiError(response.code(), response.message())
-            }
-
-            val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(PostEntity.fromDto(body))
-
-        } catch (e: IOException) {
-            throw NetworkError
-        } catch (e: Exception) {
-            throw UnknownError
         }
     }
-}
+

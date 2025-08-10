@@ -89,42 +89,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun likeById(id: Long) {
         viewModelScope.launch {
-            val currentPosts = data.value?.posts ?: return@launch
-
-            val index = currentPosts.indexOfFirst { it.id == id }
-            if (index == -1) return@launch
-
-            val post = currentPosts[index]
-            val newLikedByMe = !post.likedByMe
-            val likesDelta = if (newLikedByMe) 1 else -1
-            val updatedPost = post.copy(
-                likedByMe = newLikedByMe,
-                likes = post.likes + likesDelta
-            )
-
-
-            val oldPosts = currentPosts.toList()
-
-
-            val newPosts = currentPosts.toMutableList()
-            newPosts[index] = updatedPost
-
-
-            _dataState.value = FeedModelState()
-
-            try {
-                repository.likeById(id)
-            } catch (e: Exception) {
-
-                _dataState.value = FeedModelState()
-                val revertedPosts = oldPosts.toMutableList()
-                revertedPosts[index] = post
-
-                val newFeedModel = data.value?.copy(posts = revertedPosts)
-                if (newFeedModel != null) {
-                    _dataState.value = FeedModelState()
-                }
-            }
+           try {
+               repository.likeById(id)
+           } catch (e: Exception){
+           _dataState.value = _dataState.value?.copy(
+               error = true
+           )}
         }
     }
 
