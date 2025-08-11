@@ -88,7 +88,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                     throw ApiError(response.code(), response.message())
                 }
 
-                val body = response.body() ?: throw ApiError(response.code(), response.message())
+                
 
 
             } catch (e: IOException) {
