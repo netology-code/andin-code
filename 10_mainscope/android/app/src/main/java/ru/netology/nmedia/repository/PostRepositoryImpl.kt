@@ -78,9 +78,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 dao.insert(updatedPost)
 
 
-                dao.insert(updatedPost)
-
-
                 val response = if (liked) {
                     PostsApi.service.likeById(id)
                 } else {
@@ -92,7 +89,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 }
 
                 val body = response.body() ?: throw ApiError(response.code(), response.message())
-                dao.insert(PostEntity.fromDto(body))
+
 
             } catch (e: IOException) {
                 dao.insert(postEntity)
