@@ -58,8 +58,6 @@ dependencies {
     def okhttp_version = "5.1.0"
     def play_services_base_version = "18.7.2"
     def core_desugaring_version = "2.1.5"
-    def retrofitgson_version = "3.0.0"
-    def okhttplogging_version = "5.1.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
