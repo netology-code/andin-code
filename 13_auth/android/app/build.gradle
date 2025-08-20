@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "ru.netology.nmedia"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 35
         versionCode 1
         versionName "1.0"
@@ -86,7 +86,7 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     implementation platform("com.google.firebase:firebase-bom:$firebase_version")
-    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.firebase:firebase-messaging"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitgson_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttplogging_version"
