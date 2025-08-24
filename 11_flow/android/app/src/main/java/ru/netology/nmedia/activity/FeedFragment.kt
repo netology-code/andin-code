@@ -35,8 +35,10 @@ class FeedFragment : Fragment() {
                 viewModel.likeById(post.id)
             }
             override fun onRemove(post : Post) {
+                
                 viewModel.removeById(post.id)
             }
+
             override fun onShare(post : Post) {
                 val intent = Intent().apply {
                     action = Intent.ACTION_SEND
@@ -69,7 +71,7 @@ class FeedFragment : Fragment() {
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
         }
-        
+
         viewModel.newerCount.observe(viewLifecycleOwner) { count ->
             println("Новых постов: $count")
             notificationButton.visibility = if (count > 0) View.VISIBLE else View.GONE
