@@ -9,8 +9,13 @@ import ru.netology.nmedia.entity.PostEntity
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM PostEntity ORDER BY id DESC")
-    fun getAll(): Flow<List<PostEntity>>
+
+    @Query("SELECT * FROM PostEntity WHERE showNotification = 0 ORDER BY id DESC")
+        fun getAll(): Flow<List<PostEntity>>
+
+        @Query("UPDATE PostEntity SET showNotification = 1 WHERE showNotification = 0")
+        suspend fun markAllAsShown()
+
 
     @Query("SELECT COUNT(*) == 0 FROM PostEntity")
     suspend fun isEmpty(): Boolean

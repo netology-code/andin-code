@@ -26,17 +26,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             val url = "http://10.0.2.2:9999/avatars/${urls[index++]}"
-//            Glide.with(binding.image)
-//                .load(url)
-//                .placeholder(R.drawable.ic_loading_100dp)
-//                .error(R.drawable.ic_error_100dp)
-//                .timeout(10_000)
-//                .into(binding.image)
-
-            Picasso.get()
-                .load(url)
+           Glide.with(binding.image)
+               .load(url)
+               .circleCrop()
+                .placeholder(R.drawable.ic_loading_100dp)
                 .error(R.drawable.ic_error_100dp)
-                .into(binding.image);
+               .timeout(10_000)
+               .into(binding.image)
+
+           // Picasso.get()
+             //   .load(url)
+              //  .error(R.drawable.ic_error_100dp)
+              //  .into(binding.image);
         }
     }
 }

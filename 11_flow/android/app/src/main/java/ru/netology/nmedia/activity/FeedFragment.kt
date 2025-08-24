@@ -18,58 +18,65 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.viewmodel.PostViewModel
 
 class FeedFragment : Fragment() {
-
-    private val viewModel: PostViewModel by activityViewModels()
+    private val viewModel : PostViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
         val adapter = PostsAdapter(object : OnInteractionListener {
-            override fun onEdit(post: Post) {
+            override fun onEdit(post : Post) {
                 viewModel.edit(post)
             }
-
-            override fun onLike(post: Post) {
+            override fun onLike(post : Post) {
                 viewModel.likeById(post.id)
             }
-
-            override fun onRemove(post: Post) {
+            override fun onRemove(post : Post) {
                 viewModel.removeById(post.id)
             }
-
-            override fun onShare(post: Post) {
+            override fun onShare(post : Post) {
                 val intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, post.content)
                     type = "text/plain"
                 }
-
-                val shareIntent =
-                    Intent.createChooser(intent, getString(R.string.chooser_share_post))
+                val shareIntent = Intent.createChooser(intent, getString(R.string.chooser_share_post))
                 startActivity(shareIntent)
             }
         })
+
         binding.list.adapter = adapter
+
+        val notificationButton = binding.notificationButton
+
+
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiperefresh.isRefreshing = state.refreshing
+
             if (state.error) {
                 Snackbar.make(binding.root, R.string.error_loading, Snackbar.LENGTH_LONG)
                     .setAction(R.string.retry_loading) { viewModel.loadPosts() }
                     .show()
             }
         }
+
+
         viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
         }
-        viewModel.newerCount.observe(viewLifecycleOwner) { state ->
-            // TODO: just log it, interaction must be in homework
-            println(state)
+        
+        viewModel.newerCount.observe(viewLifecycleOwner) { count ->
+            println("Новых постов: $count")
+            notificationButton.visibility = if (count > 0) View.VISIBLE else View.GONE
+        }
+
+        notificationButton.setOnClickListener {
+            viewModel.refreshPosts()
         }
 
         binding.swiperefresh.setOnRefreshListener {

@@ -17,7 +17,7 @@ import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-    override val data = dao.getAll()
+    override val data: Flow<List<Post>> = dao.getAll()
         .map(List<PostEntity>::toDto)
         .flowOn(Dispatchers.Default)
 
@@ -47,6 +47,9 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
+
+            dao.markAllAsShown()
+
             emit(body.size)
         }
     }
@@ -70,10 +73,9 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override suspend fun removeById(id: Long) {
-        TODO("Not yet implemented")
+
     }
 
     override suspend fun likeById(id: Long) {
-        TODO("Not yet implemented")
     }
 }

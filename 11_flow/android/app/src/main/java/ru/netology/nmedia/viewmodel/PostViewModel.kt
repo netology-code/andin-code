@@ -18,7 +18,7 @@ import ru.netology.nmedia.util.SingleLiveEvent
 import kotlin.coroutines.EmptyCoroutineContext
 
 private val empty = Post(
-    id = 0,
+    id = 0L,
     content = "",
     author = "",
     authorAvatar = "",
@@ -28,7 +28,6 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    // упрощённый вариант
     private val repository: PostRepository =
         PostRepositoryImpl(AppDb.getInstance(context = application).postDao())
 
@@ -40,11 +39,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     val dataState: LiveData<FeedModelState>
         get() = _dataState
 
-    val newerCount: LiveData<Int> = data.switchMap {
-        repository.getNewerCount(it.posts.firstOrNull()?.id ?: 0L)
-            .catch { e -> e.printStackTrace() }
-            .asLiveData(Dispatchers.Default)
-    }
+
+    private val _newerCount = MutableLiveData<Int>(0)
+    val newerCount: LiveData<Int> = _newerCount
 
     private val edited = MutableLiveData(empty)
     private val _postCreated = SingleLiveEvent<Unit>()
@@ -53,6 +50,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         loadPosts()
+        observeNewPosts()
+    }
+
+    private fun observeNewPosts() {
+        viewModelScope.launch {
+            repository.getNewerCount(id = 0).collect { count ->
+                _newerCount.value = count
+            }
+        }
     }
 
     fun loadPosts() = viewModelScope.launch {
@@ -70,6 +76,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             _dataState.value = FeedModelState(refreshing = true)
             repository.getAll()
             _dataState.value = FeedModelState()
+            _newerCount.value = 0
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }
@@ -102,11 +109,19 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         edited.value = edited.value?.copy(content = text)
     }
 
-    fun likeById(id: Long) {
-        TODO()
+    fun likeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.likeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
 
-    fun removeById(id: Long) {
-        TODO()
+    fun removeById(id: Long) = viewModelScope.launch {
+        try {
+            repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
     }
 }

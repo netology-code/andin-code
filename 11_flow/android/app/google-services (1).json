@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "306260990772",
+    "project_id": "homework-7f2b0",
+    "storage_bucket": "homework-7f2b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306260990772:android:9ded0383364c60e96a6361",
+        "android_client_info": {
+          "package_name": "ru.netology.nmedia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvI4DeooRClooQl1TpX3rtXvpzeAD0cI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306260990772:android:47bca901eb5ef55d6a6361",
+        "android_client_info": {
+          "package_name": "ru.netology.nmedis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvI4DeooRClooQl1TpX3rtXvpzeAD0cI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
