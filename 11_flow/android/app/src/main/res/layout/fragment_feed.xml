@@ -43,22 +43,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/card_post"/>
+                    tools:listitem="@layout/card_post" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Минимальное изменение - разместить кнопку внутри FrameLayout, сверху -->
         <Button
             android:id="@+id/notificationButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Показать новые посты"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="16dp"
             android:background="?attr/colorPrimary"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            android:layout_gravity="top" />
-
+            android:text="Показать новые посты"
+            android:textColor="@android:color/white" />
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
