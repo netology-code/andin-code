@@ -53,7 +53,9 @@ class FeedFragment : Fragment() {
         binding.list.adapter = adapter
 
         val notificationButton = binding.notificationButton
-
+        notificationButton.setOnClickListener {
+            viewModel.showNewPosts()
+        }
 
         viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading

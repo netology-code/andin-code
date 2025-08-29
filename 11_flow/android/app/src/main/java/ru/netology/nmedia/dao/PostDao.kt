@@ -13,7 +13,7 @@ interface PostDao {
     @Query("SELECT * FROM PostEntity WHERE showNotification = 0 ORDER BY id DESC")
         fun getAll(): Flow<List<PostEntity>>
 
-        @Query("UPDATE PostEntity SET showNotification = 1 WHERE showNotification = 0")
+        @Query("UPDATE PostEntity SET showNotification = 0 WHERE showNotification = 1")
         suspend fun markAllAsShown()
 
 

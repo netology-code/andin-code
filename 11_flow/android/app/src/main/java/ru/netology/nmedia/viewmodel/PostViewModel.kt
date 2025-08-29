@@ -19,12 +19,12 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 private val empty = Post(
     id = 0L,
-    content = "",
     author = "",
     authorAvatar = "",
+    content = "",
+    published = "",
     likedByMe = false,
-    likes = 0,
-    published = ""
+    showNotification = true
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
@@ -120,6 +120,14 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     fun removeById(id: Long) = viewModelScope.launch {
         try {
             repository.removeById(id)
+        } catch (e: Exception) {
+            _dataState.value = FeedModelState(error = true)
+        }
+    }
+    fun showNewPosts() = viewModelScope.launch {
+        try {
+            repository.showNewPosts()
+            _newerCount.value = 0
         } catch (e: Exception) {
             _dataState.value = FeedModelState(error = true)
         }

@@ -29,14 +29,20 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
 
             val body = response.body() ?: throw ApiError(response.code(), response.message())
-            dao.insert(body.toEntity())
+
+
+            val postsWithNotificationFlag = body.map { it.copy(showNotification = true) }
+
+            dao.insert(postsWithNotificationFlag.toEntity())
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
             throw UnknownError
         }
     }
-
+    override suspend fun showNewPosts() {
+        dao.markAllAsShown()
+    }
     override fun getNewerCount(id: Long): Flow<Int> = flow {
         while (true) {
             delay(10_000L)
@@ -48,7 +54,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             val body = response.body() ?: throw ApiError(response.code(), response.message())
             dao.insert(body.toEntity())
 
-            dao.markAllAsShown()
+
 
             emit(body.size)
         }
