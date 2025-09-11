@@ -69,7 +69,7 @@ dependencies {
     def coroutines_version = "1.10.2"
     def imagepicker_version = "2.1"
     def workmanager_version = "2.10.3"
-    def play_services_base_version = "18.7.2"
+    def play_services_base_version = "18.8.0"
     def core_desugaring_version = "2.1.5"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
