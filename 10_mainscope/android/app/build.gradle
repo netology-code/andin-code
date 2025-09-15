@@ -59,7 +59,7 @@ dependencies {
     def nav_version = "2.9.3"
     def room_version = "2.7.2"
     def firebase_version = "34.1.0"
-    def glide_version = "4.16.0"
+    def glide_version = "5.0.5"
     def retrofit_version = "3.0.0"
     def retrofitgson_version = "3.0.0"
     def okhttplogging_version = "5.1.0"
