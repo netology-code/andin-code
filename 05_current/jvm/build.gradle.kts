@@ -11,6 +11,6 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation("com.squareup.okhttp3:okhttp:5.3.0")
     implementation("com.google.code.gson:gson:2.13.1")
 }
