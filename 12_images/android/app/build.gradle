@@ -68,6 +68,7 @@ dependencies {
     def fragment_version = "1.8.9"
     def play_services_base_version = "18.7.2"
     def core_desugaring_version = "2.1.5"
+    def ucrop_version = "2.2.11"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "androidx.core:core-ktx:$core_version"
@@ -93,6 +94,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "com.github.dhaval2404:imagepicker:$imagepicker_version"
+    implementation "com.github.yalantis:ucrop:$ucrop_version"
     implementation "com.google.android.gms:play-services-base:$play_services_base_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$core_desugaring_version"
