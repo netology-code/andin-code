@@ -1,0 +1,41 @@
+[versions]
+agp = "8.13.1"
+kotlin = "2.2.21"
+ksp = "2.3.3"
+googleServices = "4.4.4"
+coreKtx = "1.17.0"
+appcompat = "1.7.1"
+material = "1.13.0"
+activity = "1.12.1"
+constraintlayout = "2.2.1"
+gson = "2.13.2"
+navigationFragmentKtx = "2.9.6"
+navigationUiKtx = "2.9.6"
+okhttp = "5.3.2"
+room = "2.8.4"
+firebase = "34.6.0"
+playServices = "18.9.0"
+desugaring = "2.1.5"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+play-services = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServices" }
+desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
