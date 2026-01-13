@@ -37,20 +37,18 @@ class AppWebSecurityConfigurerAdapter {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain =
-        http.csrf().disable()
-            .exceptionHandling()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+        http.csrf { it.disable() }
+            .exceptionHandling {}
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
             .addFilterAfter(AuthTokenFilter(userService), BasicAuthenticationFilter::class.java)
             .anonymous {
-                it.principal(AnonymousUser).authorities(*AnonymousUser.authorities.toTypedArray())
+                it.principal(AnonymousUser)
+                    .authorities(*AnonymousUser.authorities.toTypedArray())
             }
-            .authorizeHttpRequests()
-            .anyRequest()
-            .permitAll()
-            .let {
-                http.build()
+            .authorizeHttpRequests {
+                it.anyRequest().permitAll()
             }
+            .build()
 }
