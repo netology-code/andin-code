@@ -2,7 +2,7 @@ name: Dependabot Automerge
 
 on:
   pull_request:
-    branches: [main]  # или другая ветка, куда создаются PR
+    branches: [master]
 
 jobs:
   automerge:
