@@ -10,7 +10,10 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 
 @Configuration
-class AppWebMvcConfigurer(@Value("\${app.media-location}") private val mediaLocation: String) : WebMvcConfigurer {
+class AppWebMvcConfigurer(
+    @param:Value("\${app.media-location}")
+    private val mediaLocation: String,
+) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(object : HandlerInterceptor {
             override fun preHandle(

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Lazy
 @Service
 @Transactional
 class PushService(
-    @Lazy
+    @param:Lazy
     private val messaging: FirebaseMessaging,
     private val pushTokenRepository: PushTokenRepository,
     private val objectMapper: ObjectMapper,

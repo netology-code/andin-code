@@ -14,7 +14,10 @@ import java.nio.file.Paths
 import java.util.*
 
 @Service
-class MediaService(@Value("\${app.media-location}") private val mediaLocation: String) {
+class MediaService(
+    @param:Value("\${app.media-location}")
+    private val mediaLocation: String,
+) {
     private val path = ResourceUtils.getFile(mediaLocation).toPath()
     private val tika = Tika()
 
