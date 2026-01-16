@@ -52,7 +52,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.okhttp)
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:glide:5.0.5")
     implementation("com.squareup.picasso:picasso:2.71828")
     coreLibraryDesugaring(libs.desugaring)
 }
