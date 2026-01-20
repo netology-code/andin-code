@@ -1,6 +1,7 @@
 package ru.netology.nmedia.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
@@ -40,12 +41,15 @@ class PostViewHolder(
 
     fun bind(post: Post) {
         binding.apply {
+            notSavedTextView.visibility = if (post.notSaved) View.VISIBLE else View.GONE
             author.text = post.author
             published.text = post.published
             content.text = post.content
             avatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+            like.isEnabled = !post.notSaved
+            share.isEnabled = !post.notSaved
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
