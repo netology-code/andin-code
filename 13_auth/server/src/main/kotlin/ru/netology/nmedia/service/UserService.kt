@@ -32,7 +32,7 @@ class UserService(
         UserEntity(
             0L,
             login,
-            passwordEncoder.encode(pass),
+            requireNotNull(passwordEncoder.encode(pass)),
             name,
             avatar,
         )
@@ -51,7 +51,7 @@ class UserService(
             UserEntity(
                 0L,
                 login,
-                passwordEncoder.encode(pass),
+                requireNotNull(passwordEncoder.encode(pass)),
                 name,
                 avatar?.id ?: "", // TODO:
             )
@@ -82,7 +82,7 @@ class UserService(
         ?.user
         ?.toDto()
 
-    override fun loadUserByUsername(username: String?): UserDetails =
+    override fun loadUserByUsername(username: String): UserDetails =
         userRepository.findByLogin(username) ?: throw UsernameNotFoundException(username)
 
     fun saveInitialToken(userId: Long, value: String): Token =

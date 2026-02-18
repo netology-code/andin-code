@@ -57,7 +57,7 @@ class PostService(
                         likedByMe = false,
                         published = OffsetDateTime.now().toEpochSecond()
                     )
-                ).copy(author = userRepository.getOne(principal.id))
+                ).copy(author = userRepository.getReferenceById(principal.id))
             )
             .let {
                 if (it.author.id != principal.id) {

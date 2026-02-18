@@ -25,5 +25,5 @@ data class UserEntity(
     override fun isCredentialsNonExpired(): Boolean = true
     override fun isEnabled(): Boolean = true
 
-    fun toDto() = User(id, login, name, avatar, authorities.map(GrantedAuthority::getAuthority))
+    fun toDto() = User(id, login, name, avatar, authorities.mapNotNull(GrantedAuthority::getAuthority))
 }

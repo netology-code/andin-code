@@ -37,7 +37,7 @@ class UserService(
         UserEntity(
             0L,
             login,
-            passwordEncoder.encode(pass),
+            requireNotNull(passwordEncoder.encode(pass)),
             name,
             avatar,
         )
@@ -56,12 +56,12 @@ class UserService(
             UserEntity(
                 0L,
                 login,
-                passwordEncoder.encode(pass),
+                requireNotNull(passwordEncoder.encode(pass)),
                 name,
                 avatar?.id ?: "", // TODO:
             )
         ).let { user ->
-            val token = Token(user.id, generateToken())
+            val token = Token(user.id, generateToken(), user.avatar)
             tokenRepository.save(TokenEntity(token.token, user))
             token
         }
@@ -73,7 +73,7 @@ class UserService(
             if (!passwordEncoder.matches(pass, user.password)) {
                 throw PasswordNotMatchException()
             }
-            val token = Token(user.id, generateToken())
+            val token = Token(user.id, generateToken(), user.avatar)
             tokenRepository.save(TokenEntity(token.token, user))
             token
         } ?: throw NotFoundException()
@@ -87,7 +87,7 @@ class UserService(
         ?.user
         ?.toDto()
 
-    override fun loadUserByUsername(username: String?): UserDetails =
+    override fun loadUserByUsername(username: String): UserDetails =
         userRepository.findByLogin(username) ?: throw UsernameNotFoundException(username)
 
     fun saveInitialToken(userId: Long, value: String): Token =
