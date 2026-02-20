@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.1"
+agp = "9.0.0"
 converterGson = "3.0.0"
 glide = "5.0.5"
 kotlin = "2.2.21"
