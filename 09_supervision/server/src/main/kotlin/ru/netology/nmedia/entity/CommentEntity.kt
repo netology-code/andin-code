@@ -10,7 +10,7 @@ data class CommentEntity(
     @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val post: PostEntity,
     val author: String,
-    val authorAvatar: String,
+    val authorAvatar: String?,
     @Column(columnDefinition = "TEXT")
     val content: String,
     val published: Instant,

@@ -6,7 +6,7 @@ data class Comment(
     val id: Long = 0,
     val postId: Long = 0,
     val author: String = "",
-    val authorAvatar: String = "",
+    val authorAvatar: String? = null,
     val content: String,
     val published: Instant = Instant.now(),
     val likedByMe: Boolean = false,

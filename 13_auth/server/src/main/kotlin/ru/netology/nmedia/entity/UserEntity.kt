@@ -13,9 +13,9 @@ data class UserEntity(
     var login: String,
     var pass: String,
     var name: String,
-    var avatar: String,
+    var avatar: String?,
 ) : UserDetails {
-    constructor(id: Long) : this(id, "", "", "", "")
+    constructor(id: Long) : this(id, "", "", "", null)
 
     override fun getUsername(): String = login
     override fun getPassword(): String = pass

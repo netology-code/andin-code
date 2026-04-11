@@ -10,7 +10,7 @@ data class PostEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
     val author: String,
-    val authorAvatar: String,
+    val authorAvatar: String?,
     @Column(columnDefinition = "TEXT")
     val content: String,
     val published: Long,

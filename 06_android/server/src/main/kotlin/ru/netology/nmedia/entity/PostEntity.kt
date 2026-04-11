@@ -9,7 +9,7 @@ import ru.netology.nmedia.enumeration.AttachmentType
 data class PostEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long,
     var author: String,
-    var authorAvatar: String,
+    var authorAvatar: String?,
     @Column(columnDefinition = "TEXT")
     var content: String,
     var published: Long,

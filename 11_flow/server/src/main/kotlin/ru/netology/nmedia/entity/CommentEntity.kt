@@ -8,7 +8,7 @@ data class CommentEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long,
     var postId: Long, // no relations for simplicity
     var author: String,
-    var authorAvatar: String,
+    var authorAvatar: String?,
     @Column(columnDefinition = "TEXT")
     var content: String,
     var published: Long,
