@@ -2,6 +2,7 @@ package ru.netology.nmedia.repository
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -35,8 +36,23 @@ class PostRepositoryImpl: PostRepository {
             }
     }
 
-    override fun likeById(id: Long) {
-        // TODO: do this in homework
+    override fun likeById(id: Long, isLike: Boolean) {
+        var request: Request
+        if (isLike) {
+            request = Request.Builder()
+                .delete(FormBody.Builder().build())
+                .url("${BASE_URL}/api/slow/posts/${id}/likes")
+                .build()
+        } else {
+            request = Request.Builder()
+                .post(FormBody.Builder().build())
+                .url("${BASE_URL}/api/slow/posts/${id}/likes")
+                .build()
+        }
+
+        client.newCall(request)
+            .execute()
+            .close()
     }
 
     override fun save(post: Post) {
