@@ -8,6 +8,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
 import ru.netology.nmedia.exception.NotFoundException
 import ru.netology.nmedia.repository.PostRepository
+import java.time.Instant
 import java.time.OffsetDateTime
 
 @Service
@@ -38,7 +39,7 @@ class PostService(
                     authorAvatar = "netology.jpg",
                     likes = 0,
                     likedByMe = false,
-                    published = OffsetDateTime.now().toEpochSecond()
+                    published = Instant.now()
                 )
             )
         )
@@ -75,7 +76,7 @@ class PostService(
         dto.copy(
             likes = 0,
             likedByMe = false,
-            published = OffsetDateTime.now().toEpochSecond()
+            published = Instant.now()
         )
     ).let {
         repository.save(it)

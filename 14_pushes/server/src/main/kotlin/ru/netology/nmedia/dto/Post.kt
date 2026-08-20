@@ -1,6 +1,9 @@
 package ru.netology.nmedia.dto
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import ru.netology.nmedia.enumeration.AttachmentType
+import java.time.Instant
 
 data class Post(
     val id: Long,
@@ -8,11 +11,34 @@ data class Post(
     val author: String,
     val authorAvatar: String? = null,
     val content: String,
-    val published: Long,
+    val published: Instant,
     val likedByMe: Boolean,
     val likes: Int = 0,
-    var attachment: Attachment? = null,
-)
+    val attachment: Attachment? = null,
+) {
+    @JsonCreator
+    constructor(
+        @JsonProperty("id") id: Long?,
+        @JsonProperty("authorId") authorId: Long?,
+        @JsonProperty("author") author: String?,
+        @JsonProperty("authorAvatar") authorAvatar: String?,
+        @JsonProperty("content") content: String,
+        @JsonProperty("published") published: Instant?,
+        @JsonProperty("likedByMe") likedByMe: Boolean?,
+        @JsonProperty("likes") likes: Int?,
+        @JsonProperty("attachment") attachment: Attachment?,
+    ) : this(
+        id = id ?: 0,
+        author = author ?: "",
+        content = content,
+        published = published ?: Instant.now(),
+        likedByMe = likedByMe ?: false,
+        authorAvatar = authorAvatar,
+        attachment = attachment,
+        likes = likes ?: 0,
+        authorId = authorId ?: 0,
+    )
+}
 
 data class Attachment(
     val url: String,

@@ -2,6 +2,7 @@ package ru.netology.nmedia.entity
 
 import ru.netology.nmedia.dto.Comment
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 data class CommentEntity(
@@ -11,7 +12,7 @@ data class CommentEntity(
     var author: UserEntity,
     @Column(columnDefinition = "TEXT")
     var content: String,
-    var published: Long,
+    var published: Instant,
     @ElementCollection
     var likeOwnerIds: MutableSet<Long> = mutableSetOf(),
 ) {

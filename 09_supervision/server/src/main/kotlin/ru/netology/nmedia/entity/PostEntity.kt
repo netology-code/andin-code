@@ -4,6 +4,7 @@ import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 data class PostEntity(
@@ -13,7 +14,7 @@ data class PostEntity(
     val authorAvatar: String?,
     @Column(columnDefinition = "TEXT")
     val content: String,
-    val published: Long,
+    val published: Instant,
     val likedByMe: Boolean,
     val likes: Int = 0,
     @Embedded

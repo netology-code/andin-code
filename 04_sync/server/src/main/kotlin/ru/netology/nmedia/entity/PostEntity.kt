@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
+import java.time.Instant
 
 @Entity
 data class PostEntity(
@@ -13,7 +14,7 @@ data class PostEntity(
     var author: String,
     @Column(columnDefinition = "TEXT")
     var content: String,
-    var published: Long,
+    var published: Instant,
     var likedByMe: Boolean,
     var likes: Int = 0,
 ) {

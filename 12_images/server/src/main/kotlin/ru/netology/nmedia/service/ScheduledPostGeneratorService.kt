@@ -4,6 +4,7 @@ import com.github.javafaker.Faker
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.Post
+import java.time.Instant
 
 @Service
 class ScheduledPostGeneratorService(
@@ -18,7 +19,7 @@ class ScheduledPostGeneratorService(
                 author = "Game of Thrones",
                 authorAvatar = "got.jpg",
                 content = faker.gameOfThrones().quote(),
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
             )

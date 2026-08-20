@@ -13,6 +13,7 @@ import ru.netology.nmedia.extensions.principal
 import ru.netology.nmedia.repository.PostRepository
 import java.time.OffsetDateTime
 import ru.netology.nmedia.repository.UserRepository
+import java.time.Instant
 
 @Service
 @Transactional
@@ -55,7 +56,7 @@ class PostService(
                         authorAvatar = principal.avatar,
                         likes = 0,
                         likedByMe = false,
-                        published = OffsetDateTime.now().toEpochSecond()
+                        published = Instant.now(),
                     )
                 ).copy(author = userRepository.getOne(principal.id))
             )
@@ -112,7 +113,7 @@ class PostService(
         dto.copy(
             likes = 0,
             likedByMe = false,
-            published = OffsetDateTime.now().toEpochSecond()
+            published = Instant.now(),
         )
     ).let {
         it.content = dto.content

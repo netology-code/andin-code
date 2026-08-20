@@ -10,6 +10,7 @@ import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.service.CommentService
 import ru.netology.nmedia.service.PostService
+import java.time.Instant
 
 @SpringBootApplication
 class NMediaApplication {
@@ -21,7 +22,7 @@ class NMediaApplication {
                 author = "Netology",
                 authorAvatar = "netology.jpg",
                 content = "Привет, это новая Нетология!",
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
             )
@@ -32,7 +33,7 @@ class NMediaApplication {
                 author = "Сбер",
                 authorAvatar = "sber.jpg",
                 content = "Привет, это новый Сбер!",
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
             )
@@ -43,7 +44,7 @@ class NMediaApplication {
                 author = "Тинькофф",
                 authorAvatar = "tcs.jpg",
                 content = "Нам и так норм!",
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
             )
@@ -54,7 +55,7 @@ class NMediaApplication {
                 author = "Netology",
                 authorAvatar = "netology.jpg",
                 content = "Подкасты любят за возможность проводить время с пользой и слушать познавательные лекции или беседы во время прогулок или домашних дел. Интересно, что запустить свой подкаст и обсуждать интересные темы может любой.",
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
                 attachment = Attachment(
@@ -70,7 +71,7 @@ class NMediaApplication {
                 author = "Сбер",
                 authorAvatar = "sber.jpg",
                 content = "Появился новый способ мошенничества \uD83D\uDE21 Злоумышленники звонят от имени банка и говорят, что для клиента выпущена новая, особо защищённая карта, которую можно добавить в приложение Кошелёк на смартфоне. Под диктовку мошенника человек привязывает к Кошельку его карту, причём указывает своё имя. Если карту пополнить, деньги уйдут мошеннику.\n\nДело в том, что в Кошелёк можно добавить любую, даже чужую карту, а имя поставить какое угодно. Но чужая банковская карта не будет отображаться, например, в СберБанк Онлайн.",
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
                 attachment = Attachment(
@@ -88,7 +89,7 @@ class NMediaApplication {
                     author = "Netology",
                     authorAvatar = "netology.jpg",
                     content = "Отлично!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )
@@ -100,7 +101,7 @@ class NMediaApplication {
                     author = "Сбер",
                     authorAvatar = "sber.jpg",
                     content = "Мы тоже обновились!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )
@@ -112,7 +113,7 @@ class NMediaApplication {
                     author = "Netology",
                     authorAvatar = "netology.jpg",
                     content = "Новый логотип прекрасен!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )

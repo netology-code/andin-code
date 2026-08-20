@@ -6,6 +6,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.service.PostService
+import java.time.Instant
 
 @SpringBootApplication
 class NMediaApplication {
@@ -18,7 +19,7 @@ class NMediaApplication {
                     author = "Netology",
                     authorAvatar = "netology.jpg",
                     content = "Привет, это новая Нетология!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )
@@ -29,7 +30,7 @@ class NMediaApplication {
                     author = "Сбер",
                     authorAvatar = "sber.jpg",
                     content = "Привет, это новый Сбер!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )
@@ -40,7 +41,7 @@ class NMediaApplication {
                     author = "Тинькофф",
                     authorAvatar = "tcs.jpg",
                     content = "Нам и так норм!",
-                    published = 0,
+                    published = Instant.now(),
                     likedByMe = false,
                     likes = 0,
                 )

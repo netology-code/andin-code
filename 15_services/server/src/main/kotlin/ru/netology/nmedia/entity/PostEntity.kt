@@ -4,6 +4,7 @@ import ru.netology.nmedia.dto.Attachment
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.enumeration.AttachmentType
 import jakarta.persistence.*
+import java.time.Instant
 
 @Entity
 data class PostEntity(
@@ -12,7 +13,7 @@ data class PostEntity(
     var author: UserEntity,
     @Column(columnDefinition = "TEXT")
     var content: String,
-    var published: Long,
+    var published: Instant,
     @ElementCollection
     var likeOwnerIds: MutableSet<Long> = mutableSetOf(),
     @Embedded

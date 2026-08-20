@@ -7,6 +7,7 @@ import ru.netology.nmedia.dto.Comment
 import ru.netology.nmedia.entity.CommentEntity
 import ru.netology.nmedia.exception.NotFoundException
 import ru.netology.nmedia.repository.CommentRepository
+import java.time.Instant
 import java.time.OffsetDateTime
 
 @Service
@@ -28,7 +29,7 @@ class CommentService(private val repository: CommentRepository) {
                 dto.copy(
                     likes = 0,
                     likedByMe = false,
-                    published = OffsetDateTime.now().toEpochSecond()
+                    published = Instant.now(),
                 )
             )
         )

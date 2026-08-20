@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import ru.netology.nmedia.dto.Post
+import java.time.Instant
 
 @Service
 @Transactional
@@ -25,7 +26,7 @@ class ScheduledPostGeneratorService(
                 author = user.name,
                 authorAvatar = user.avatar,
                 content = faker.gameOfThrones().quote(),
-                published = 0,
+                published = Instant.now(),
                 likedByMe = false,
                 likes = 0,
             )
