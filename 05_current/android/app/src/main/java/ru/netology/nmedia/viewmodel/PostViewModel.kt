@@ -47,13 +47,26 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        edited.value?.let {
-            thread {
-                repository.save(it)
-                _postCreated.postValue(Unit)
+        edited.value?.let { data ->
+            val client = OkHttpClient()
+            val requestBody = data.toString().toRequestBody("application/json".toVediaType))
+            .url()
+            .post(requestBody)
+            .build()
+
+            client.newCall(request).enqueue(object : CallBack{
+                override fun onFailure(call: Call, e : IOExceptoin){
+                Log.e("SaveError", e)}
             }
-        }
-        edited.value = empty
+                    override fun onResponse(call: Call, response: response){
+                        if(response.isSuccessful){
+                            _postCreated.postValue(unit)
+                        } else{
+                            Log.e("SaveError", e)
+                        }
+            }
+        })
+          edit.value = empty
     }
 
     fun edit(post: Post) {
@@ -69,23 +82,42 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+        val request = Request.Builder()
+            .url(url)
+            .post(RequestBody.create(null,""))
+            .build()
+        client.newCall(request).enqueue(object: CallBack{
+            override fun onFailure(call: CAll, e: IOException){
+                Log.e("LikeError","Failed to like post $id", e)
+            }
+            override fun onResponse(call: Call, response: Response){
+                if(!response.isSuccessful){
+                    Log.e("LikeError","Failed to like post $id: ${response.code}")
+                }
+            }
+        })
     }
 
     fun removeById(id: Long) {
-        thread {
-            // Оптимистичная модель
+
             val old = _data.value?.posts.orEmpty()
-            _data.postValue(
-                _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .filter { it.id != id }
-                )
-            )
-            try {
-                repository.removeById(id)
-            } catch (e: IOException) {
-                _data.postValue(_data.value?.copy(posts = old))
+        val request = Request.Builder()
+            .url(url)
+            .delete
+            .build()
+
+        client.newCall(request).enqueue(object: Callback{
+            override fun omFailure(call: Call, e: IOException){
+                _data.postValue(_data.value?.copy(posts = oldPosts))
+            }
+            override fun onResponse(call: Call, response: Response){
+                if(!response.isSuccessful){
+                    _data.postValue(_data.value?copy(posts = oldPosts))
+                    Log.e("RemoveError", "Server Error")
+            }
+        })
+
             }
         }
-    }
+
 }
