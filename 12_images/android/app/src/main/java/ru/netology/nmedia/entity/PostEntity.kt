@@ -12,9 +12,9 @@ data class PostEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val author: String,
-    val authorAvatar: String,
+    val authorAvatar: String?,
     val content: String,
-    val published: Long,
+    val published: String,
     val likedByMe: Boolean,
     val likes: Int = 0,
     @Embedded
