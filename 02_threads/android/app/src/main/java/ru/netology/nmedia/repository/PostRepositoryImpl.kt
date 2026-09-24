@@ -36,8 +36,27 @@ class PostRepositoryImpl: PostRepository {
     }
 
     override fun likeById(id: Long) {
-        // TODO: do this in homework
+        val liked = false
+        val request = if (liked) {
+
+            Request.Builder()
+                .post("".toRequestBody("application/json".toMediaType()))
+                .url("${BASE_URL}/api/posts/$id/likes")
+                .build()
+        } else {
+
+            Request.Builder()
+                .delete()
+                .url("${BASE_URL}/api/posts/$id/likes")
+                .build()
+        }
+
+        client.newCall(request).execute().close()
+
+
+        getAll()
     }
+
 
     override fun save(post: Post) {
         val request: Request = Request.Builder()
