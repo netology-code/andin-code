@@ -71,7 +71,29 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun likeById(id: Long) {
-        thread { repository.likeById(id) }
+
+        val currentState = _data.value
+        val currentPosts = currentState?.posts.orEmpty().toMutableList()
+
+        val index = currentPosts.indexOfFirst { it.id == id }
+
+        val oldPost = currentPosts[index]
+        val newPost = oldPost.copy(
+            likedByMe = !oldPost.likedByMe,
+            likes = if (oldPost.likedByMe) oldPost.likes - 1 else oldPost.likes + 1
+        )
+
+        currentPosts[index] = newPost
+        _data.postValue(currentState?.copy(posts = currentPosts))
+
+        // Отправляем запрос на сервер (оптимистично считаем, что он пройдет успешно)
+        try {
+            thread { repository.likeById(id, oldPost.likedByMe) }
+            // Если запрос успешен, интерфейс уже обновлен, ничего делать не нужно.
+        } catch (e: IOException) {
+            currentPosts[index] = oldPost // Возвращаем старый пост
+            _data.postValue(currentState?.copy(posts = currentPosts))
+        }
     }
 
     fun removeById(id: Long) {
