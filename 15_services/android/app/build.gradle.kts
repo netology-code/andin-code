@@ -72,6 +72,6 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.imagepicker)
     implementation(libs.ucrop)
-    implementation("androidx.work:work-runtime-ktx:2.10.3")
+    implementation("androidx.work:work-runtime-ktx:2.11.0")
     coreLibraryDesugaring(libs.desugaring)
 }
